@@ -12,7 +12,7 @@ from email.mime.multipart import MIMEMultipart
 app = Flask(__name__)
 bcrypt = Bcrypt(app)
 DATABASE = 'maori_dictionary.db'
-
+app.secret_key = "twentyone"
 
 def create_connection(db_file):     # Connects the desired database file
     try:
@@ -27,9 +27,40 @@ def create_connection(db_file):     # Connects the desired database file
 def render_homepage():
     return render_template("home.html")
 
-@app.route('/login')
+@app.route('/login', methods=["GET", "POST"])
 def render_login_page():
-    return render_template("login.html")
+    if is_logged_in():
+        return redirect('/')
+
+    if request.method == 'POST':
+        print(request.form)
+        email = request.form['email'].strip().lower()
+        password = request.form['password'].strip()
+
+        query = """SELECT id, fname, password FROM user WHERE email = ?"""
+        con = create_connection(DATABASE)
+        cur = con.cursor()
+        cur.execute(query, (email,))
+        user_data = cur.fetchall()
+        con.close()
+
+        try:
+            userid = user_data[0][0]
+            firstname = user_data[0][1]
+            db_password = user_data[0][2]
+        except IndexError:
+            return redirect("/login?error=Email+invalid+or+password+incorrect")
+
+        if not bcrypt.check_password_hash(db_password, password):
+            return redirect(request.referrer + "?error=Email+invalid+or+password+incorrect")
+
+        session['email'] = email
+        session['userid'] = userid
+        session['firstname'] = firstname
+        print(session)
+        return redirect('/')
+
+    return render_template("login.html", logged_in=is_logged_in())
 
 def is_logged_in():
     if session.get("email") is None:
@@ -38,6 +69,13 @@ def is_logged_in():
     else:
         print("logged in")
         return True
+
+@app.route('/logout')
+def logout():
+    print(list(session.keys()))
+    [session.pop(key) for key in list(session.keys())]
+    print(list(session.keys()))
+    return redirect('/?message=See+you+next+time!')
 
 
 @app.route('/signup', methods=['GET', 'POST'])
@@ -64,7 +102,7 @@ def render_signup_page():
 
         con = create_connection(DATABASE)     # creates the connection with the desired database file.
 
-        query = "INSERT INTO users(id, fname, lname, email, password) VALUES(NULL,?,?,?,?)"     # inserts into "users."
+        query = "INSERT INTO user(id, fname, lname, email, password) VALUES(NULL,?,?,?,?)"     # inserts into "user".
 
         cur = con.cursor()
         try:

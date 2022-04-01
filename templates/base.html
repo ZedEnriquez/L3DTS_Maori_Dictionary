@@ -39,7 +39,13 @@
                 <li><a href="\">Sport</a></li>
                 <li><a href="\">Technology</a></li>
                 <li><a href="\">Time</a></li>
-                <li><a href="\login">Login</a></li>
+
+                    {% if logged_in %}
+                        <li><a href="/logout"> logout</a></li>
+                    {% else %}
+                        <li><a href="/login">login</a></li>
+                    {% endif %}
+
 			</ul>
 		</nav>
 
