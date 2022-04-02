@@ -3,7 +3,6 @@ import sqlite3
 from sqlite3 import Error
 from flask_bcrypt import Bcrypt
 from datetime import datetime
-
 import smtplib, ssl
 from smtplib import SMTPAuthenticationError
 from email.mime.text import MIMEText
