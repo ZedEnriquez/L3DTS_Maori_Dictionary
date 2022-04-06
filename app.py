@@ -22,9 +22,19 @@ def create_connection(db_file):     # Connects the desired database file
         print(e)
     return None
 
+
+def is_logged_in():
+    if session.get("email") is None:
+        print("not logged in")
+        return False
+    else:
+        print("logged in")
+        return True
+
+
 @app.route('/')
 def render_homepage():
-    return render_template("home.html")
+    return render_template("home.html", logged_in=is_logged_in())
 
 @app.route('/login', methods=["GET", "POST"])
 def render_login_page():
@@ -36,7 +46,7 @@ def render_login_page():
         email = request.form['email'].strip().lower()
         password = request.form['password'].strip()
 
-        query = """SELECT id, fname, password FROM user WHERE email = ?"""
+        query = """SELECT id, fname, password FROM users WHERE email = ?"""
         con = create_connection(DATABASE)
         cur = con.cursor()
         cur.execute(query, (email,))
@@ -61,13 +71,7 @@ def render_login_page():
 
     return render_template("login.html", logged_in=is_logged_in())
 
-def is_logged_in():
-    if session.get("email") is None:
-        print("not logged in")
-        return False
-    else:
-        print("logged in")
-        return True
+
 
 @app.route('/logout')
 def logout():
