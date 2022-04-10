@@ -80,6 +80,9 @@ def logout():
     print(list(session.keys()))
     return redirect('/?message=See+you+next+time!')
 
+@app.route('/add_category')
+def render_add_category_page():
+    return render_template("add_category.html")
 
 @app.route('/signup', methods=['GET', 'POST'])
 def render_signup_page():
