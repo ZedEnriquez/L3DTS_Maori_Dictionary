@@ -22,7 +22,9 @@
 			<span></span>
 			<span></span>
 			<ul>
-                <li><a href="\">Action</a></li>
+                {% for category in categories %}
+                <li><a href="\category\{{ category[0] }}">{{ category[1] }}</a></li>
+                {% endfor %}}
                 <li><a href="\">Animals</a></li>
                 <li><a href="\">Clothing</a></li>
                 <li><a href="\">Culture / Religion</a></li>

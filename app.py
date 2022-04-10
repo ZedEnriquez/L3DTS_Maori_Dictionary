@@ -8,10 +8,12 @@ from smtplib import SMTPAuthenticationError
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 
+
 app = Flask(__name__)
-bcrypt = Bcrypt(app)
+bcrypt = Bcrypt(app)     # Bcrypt is used to hash the user's passwords.
 DATABASE = 'maori_dictionary.db'
 app.secret_key = "twentyone"
+
 
 def create_connection(db_file):     # Connects the desired database file
     try:
@@ -34,7 +36,8 @@ def is_logged_in():
 
 @app.route('/')
 def render_homepage():
-    return render_template("home.html", logged_in=is_logged_in())
+    return render_template("home.html", logged_in=is_logged_in(), categories=category_list)
+
 
 @app.route('/login', methods=["GET", "POST"])
 def render_login_page():
@@ -72,7 +75,6 @@ def render_login_page():
     return render_template("login.html", logged_in=is_logged_in())
 
 
-
 @app.route('/logout')
 def logout():
     print(list(session.keys()))
@@ -80,9 +82,32 @@ def logout():
     print(list(session.keys()))
     return redirect('/?message=See+you+next+time!')
 
-@app.route('/add_category')
+
+@app.route('/add_category', methods=["GET", "POST"])
 def render_add_category_page():
-    return render_template("add_category.html")
+
+    if request.method == 'POST':
+        print(request.form)
+        cat_name = request.form['category_name'].strip().title()
+
+        query = "INSERT INTO categories(id, category_name) VALUES(NULL,?)"  # inserts into "categories".
+        con = create_connection(DATABASE)
+        cur = con.cursor()
+        try:
+            cur.execute(query, (cat_name, ))
+        except sqlite3.ProgrammingError:
+            return redirect('/?error=Incorrect+number+of+bindings+supplied')
+
+        con.commit()
+        con.close()
+        return redirect("/")
+    error = request.args.get('error')
+
+    if error == None:
+        error = ""
+
+    return render_template("add_category.html", error=error)
+
 
 @app.route('/signup', methods=['GET', 'POST'])
 def render_signup_page():
@@ -125,6 +150,7 @@ def render_signup_page():
         error = ""
 
     return render_template("signup.html", error=error)
+
 
 # This line allows the app to run.
 if __name__ == '__main__':
