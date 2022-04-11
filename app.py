@@ -33,10 +33,22 @@ def is_logged_in():
         print("logged in")
         return True
 
+#def category_list_exists():
+#    if category in categories is None:
+#        print("categories_do_not_exist")
+#        return False
+#    else:
+#        print("categories_exist")
+#        return True
+
+
 
 @app.route('/')
 def render_homepage():
-    return render_template("home.html", logged_in=is_logged_in(), categories=category_list)
+#    if category_list_exists():
+#        return redirect('/')
+
+    return render_template("home.html", logged_in=is_logged_in()) #, categories_exist=category_list_exists)
 
 
 @app.route('/login', methods=["GET", "POST"])
