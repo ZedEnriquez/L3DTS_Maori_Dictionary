@@ -15,6 +15,16 @@ DATABASE = 'maori_dictionary.db'
 app.secret_key = "twentyone"
 
 
+def categories():
+    query = "SELECT category_name FROM categories"
+    con = create_connection(DATABASE)
+    cur = con.cursor()
+    cur.execute(query)
+    category_list = cur.fetchall()
+    con.close()
+    return category_list
+
+
 def create_connection(db_file):     # Connects the desired database file
     try:
         connection = sqlite3.connect(db_file)
@@ -41,49 +51,38 @@ def is_logged_in():
 #        print("categories_exist")
 #        return True
 
-
-
 @app.route('/')
 def render_homepage():
-#    if category_list_exists():
-#        return redirect('/')
-
-    return render_template("home.html", logged_in=is_logged_in()) #, categories_exist=category_list_exists)
+    return render_template("home.html", logged_in=is_logged_in(), categories=categories()) #, categories_exist=category_list_exists)
 
 
 @app.route('/login', methods=["GET", "POST"])
 def render_login_page():
     if is_logged_in():
         return redirect('/')
-
     if request.method == 'POST':
         print(request.form)
         email = request.form['email'].strip().lower()
         password = request.form['password'].strip()
-
         query = """SELECT id, fname, password FROM users WHERE email = ?"""
         con = create_connection(DATABASE)
         cur = con.cursor()
         cur.execute(query, (email,))
         user_data = cur.fetchall()
         con.close()
-
         try:
             userid = user_data[0][0]
             firstname = user_data[0][1]
             db_password = user_data[0][2]
         except IndexError:
             return redirect("/login?error=Email+invalid+or+password+incorrect")
-
         if not bcrypt.check_password_hash(db_password, password):
             return redirect(request.referrer + "?error=Email+invalid+or+password+incorrect")
-
         session['email'] = email
         session['userid'] = userid
         session['firstname'] = firstname
         print(session)
         return redirect('/')
-
     return render_template("login.html", logged_in=is_logged_in())
 
 
@@ -97,11 +96,9 @@ def logout():
 
 @app.route('/add_category', methods=["GET", "POST"])
 def render_add_category_page():
-
     if request.method == 'POST':
         print(request.form)
         cat_name = request.form['category_name'].strip().title()
-
         query = "INSERT INTO categories(id, category_name) VALUES(NULL,?)"  # inserts into "categories".
         con = create_connection(DATABASE)
         cur = con.cursor()
@@ -109,15 +106,12 @@ def render_add_category_page():
             cur.execute(query, (cat_name, ))
         except sqlite3.ProgrammingError:
             return redirect('/?error=Incorrect+number+of+bindings+supplied')
-
         con.commit()
         con.close()
         return redirect("/")
     error = request.args.get('error')
-
     if error == None:
         error = ""
-
     return render_template("add_category.html", error=error)
 
 
@@ -125,7 +119,6 @@ def render_add_category_page():
 def render_signup_page():
     if is_logged_in():
         return redirect('/')
-
     if request.method == 'POST':     # Post is the method used after submitting your details.
         print(request.form)
         fname = request.form.get('fname').strip().title()     # .get: Websites gets the information.
@@ -157,10 +150,8 @@ def render_signup_page():
         con.close()
         return redirect("/login")
     error = request.args.get('error')
-
     if error == None:
         error = ""
-
     return render_template("signup.html", error=error)
 
 
