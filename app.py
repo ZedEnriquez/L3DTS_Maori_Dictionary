@@ -8,12 +8,10 @@ from smtplib import SMTPAuthenticationError
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 
-
 app = Flask(__name__)
 bcrypt = Bcrypt(app)     # Bcrypt is used to hash the user's passwords.
 DATABASE = 'maori_dictionary.db'
 app.secret_key = "twentyone"
-
 
 def categories():
     query = "SELECT category_name FROM categories"
@@ -24,7 +22,6 @@ def categories():
     con.close()
     return category_list
 
-
 def create_connection(db_file):     # Connects the desired database file
     try:
         connection = sqlite3.connect(db_file)
@@ -34,7 +31,6 @@ def create_connection(db_file):     # Connects the desired database file
         print(e)
     return None
 
-
 def is_logged_in():
     if session.get("email") is None:
         print("not logged in")
@@ -43,18 +39,9 @@ def is_logged_in():
         print("logged in")
         return True
 
-#def category_list_exists():
-#    if category in categories is None:
-#        print("categories_do_not_exist")
-#        return False
-#    else:
-#        print("categories_exist")
-#        return True
-
 @app.route('/')
 def render_homepage():
     return render_template("home.html", logged_in=is_logged_in(), categories=categories()) #, categories_exist=category_list_exists)
-
 
 @app.route('/login', methods=["GET", "POST"])
 def render_login_page():
@@ -83,8 +70,7 @@ def render_login_page():
         session['firstname'] = firstname
         print(session)
         return redirect('/')
-    return render_template("login.html", logged_in=is_logged_in())
-
+    return render_template("login.html", logged_in=is_logged_in(), categories=categories())
 
 @app.route('/logout')
 def logout():
@@ -92,7 +78,6 @@ def logout():
     [session.pop(key) for key in list(session.keys())]
     print(list(session.keys()))
     return redirect('/?message=See+you+next+time!')
-
 
 @app.route('/add_category', methods=["GET", "POST"])
 def render_add_category_page():
@@ -112,8 +97,7 @@ def render_add_category_page():
     error = request.args.get('error')
     if error == None:
         error = ""
-    return render_template("add_category.html", error=error)
-
+    return render_template("add_category.html", error=error, logged_in=is_logged_in(), categories=categories())
 
 @app.route('/signup', methods=['GET', 'POST'])
 def render_signup_page():
@@ -154,7 +138,5 @@ def render_signup_page():
         error = ""
     return render_template("signup.html", error=error)
 
-
-# This line allows the app to run.
 if __name__ == '__main__':
     app.run()

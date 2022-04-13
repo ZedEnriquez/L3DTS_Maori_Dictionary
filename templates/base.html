@@ -22,8 +22,8 @@
 			<span></span>
 			<span></span>
 			<ul>
-                {% for category in categories %}
-                <li><a href="\category\{{ category[1] }}">{{ category[1] }}</a></li>
+                {% for categories in categories %}
+                <li><a href="\categories\{{ categories[0] }}">{{ categories[0] }}</a></li>
                 {% endfor %}}
 
                 {% if logged_in %}
