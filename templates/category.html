@@ -1,5 +1,30 @@
 {% extends "base.html" %}
+
 {% block main %}
-{% for dictionary in contents %}
-{% endfor %}
-{% end block %}
+<table>
+    <tr>
+        <th>Maori</th>
+        <th>English</th>
+        <th>Image</th>
+        <th>Definition</th>
+        <th>Level</th>
+        <th>Date</th>
+    </tr>
+    <tbody>
+    {% for i in contents %}
+    {% if i[0] == Cat_id %}
+    <tr>
+        <td>{{ i[1] }}</td>
+        <td>{{ i[2] }}</td>
+        <td>{{ i[3] }}</td>
+        <td>{{ i[4] }}</td>
+        <td>{{ i[5] }}</td>
+        <td>{{ i[6] }}</td>
+    </tr>
+    {% endif %}
+    {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}
+

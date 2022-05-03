@@ -21,7 +21,7 @@ bcrypt = Bcrypt(app)
 
 # Collecting Category Names
 def categories():
-    query = "SELECT category_name FROM categories"
+    query = "SELECT id, category_name FROM categories"
     con = create_connection(DATABASE)
     cur = con.cursor()
     cur.execute(query)
@@ -51,7 +51,8 @@ def is_logged_in():
 # Homepage
 @app.route('/')
 def render_homepage():
-    return render_template("home.html", logged_in=is_logged_in(), categories=categories()) #, categories_exist=category_list_exists)
+    return render_template("home.html", logged_in=is_logged_in(),
+                           categories=categories()) #, categories_exist=category_list_exists)
 
 # User Signup
 @app.route('/signup', methods=['GET', 'POST'])
@@ -155,7 +156,7 @@ def render_add_category_page():
 # Displaying the Category page
 @app.route('/category/<Cat_id>')
 def render_category_page(Cat_id):
-    con = create_connection(databse)
+    con = create_connection(DATABASE)
 
 # Displaying the contents for the specified category
     query = "SELECT id, Maori, English, Cat_id, Definition, Level, Image, date FROM dictionary"
@@ -172,7 +173,6 @@ def render_category_page(Cat_id):
 
     return render_template('category.html', contents = contents,
                            specific_category = specific_category, categories = categories(), Cat_id = int(Cat_id))
-
 
 # Running the app
 if __name__ == '__main__':
