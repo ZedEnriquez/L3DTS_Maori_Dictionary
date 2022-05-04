@@ -159,20 +159,24 @@ def render_category_page(Cat_id):
     con = create_connection(DATABASE)
 
 # Displaying the contents for the specified category
-    query = "SELECT id, Maori, English, Cat_id, Definition, Level, Image, date FROM dictionary"
+    query = """SELECT id, Maori, English, Cat_id, Definition, Level, Image, date FROM dictionary 
+            WHERE Cat_id=?"""
     cur = con.cursor()
-    cur.execute(query)
+    cur.execute(query, Cat_id,)
     contents = cur.fetchall()
 
-    query = "SELECT id, category_name FROM categories"
+    query = "SELECT id, category_name FROM categories WHERE id=?"
     cur = con.cursor()
-    cur.execute(query)
+    cur.execute(query, Cat_id,)
     specific_category = cur.fetchall()
     con.commit()
     con.close()
 
     return render_template('category.html', contents = contents,
-                           specific_category = specific_category, categories = categories(), Cat_id = int(Cat_id))
+                           specific_category = specific_category,
+                           categories = categories(),
+                           Cat_id = int(Cat_id),
+                           logged_in=is_logged_in())
 
 # Running the app
 if __name__ == '__main__':
