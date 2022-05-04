@@ -13,7 +13,7 @@
 	<div id="container">
 
 		<header>
-			<h1>{% block heading %}TEST{% endblock %}</h1>
+			<h1>{% block heading %}{% endblock %}</h1>
 		</header>
 
 		<nav>
@@ -22,18 +22,21 @@
 			<span></span>
 			<span></span>
 			<ul>
-                {% for categories in categories %}
-                <li><a href="/category/{{ categories[0] }}">{{ categories[1] }}</a></li>
-                {% endfor %}}
+				{% if logged_in %}
+					<li><a href="/add_category">Add a category</a></li>
+                    <li><a href="/logout">Logout</a></li>
+			</ul>
 
-                {% if logged_in %}
-                    <a>_________________</a>
-                    <li><a href="/logout">logout</a></li>
-                    <li><a href="/add_category">add a category</a></li>
+			<a> ____________ </a>
+
+			<ul>
+					{% for categories in categories %}
+               	 	<li><a href="/category/{{ categories[0] }}">{{ categories[1] }}</a></li>
+               	 	{% endfor %}}
+
                 {% else %}
                     <li><a href="/login">login</a></li>
                 {% endif %}
-
 			</ul>
 		</nav>
 

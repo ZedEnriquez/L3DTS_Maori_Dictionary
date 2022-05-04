@@ -1,9 +1,18 @@
 {% extends 'base.html' %}
 
-{% block title %}Maōri Dictionary | Home{% endblock %}
-
+{% block title %}Maōri - English Dictionary{% endblock %}
 {% block heading %}Maōri - English Dictionary{% endblock %}
 
 {% block main %}
+
+<h1>Welcome</h1>
+
+    {% if logged_in %}
+    <p>You are free to browse around and discover
+        words that you are or aren't familiar with.</p>
+    {% endif %}
+
+<p>In order to use this amazing dictionary you need to log in using your account.</p>
+<p>If you don't have one, go sign up in the log in page.</p>
 
 {% endblock %}

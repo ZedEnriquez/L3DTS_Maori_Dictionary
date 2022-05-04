@@ -5,19 +5,23 @@ from flask import Flask, render_template, request, session, redirect
 import sqlite3
 from sqlite3 import Error
 from flask_bcrypt import Bcrypt
-from datetime import datetime
-import smtplib, ssl
-from smtplib import SMTPAuthenticationError
-from email.mime.text import MIMEText
-from email.mime.multipart import MIMEMultipart
+
+# Unused Imports
+# from datetime import datetime
+# import smtplib, ssl
+# from smtplib import SMTPAuthenticationError
+# from email.mime.text import MIMEText
+# from email.mime.multipart import MIMEMultipart
 
 # Necessary Code
 app = Flask(__name__)
-DATABASE = 'maori_dictionary.db'
 app.secret_key = "twentyone"
+DATABASE = 'maori_dictionary.db'
+
 
 # Bcrypt is used to hash the user's passwords.
 bcrypt = Bcrypt(app)
+
 
 # Collecting Category Names
 def categories():
@@ -29,6 +33,7 @@ def categories():
     con.close()
     return category_list
 
+
 # Connecting the database
 def create_connection(db_file):
     try:
@@ -39,6 +44,7 @@ def create_connection(db_file):
         print(e)
     return None
 
+
 # Checking the login state
 def is_logged_in():
     if session.get("email") is None:
@@ -48,11 +54,13 @@ def is_logged_in():
         print("logged in")
         return True
 
+
 # Homepage
 @app.route('/')
 def render_homepage():
     return render_template("home.html", logged_in=is_logged_in(),
-                           categories=categories()) #, categories_exist=category_list_exists)
+                           categories=categories())
+
 
 # User Signup
 @app.route('/signup', methods=['GET', 'POST'])
@@ -73,12 +81,12 @@ def render_signup_page():
         if len(password) < 8:     # Requires the user to have a more secure password.
             return redirect('/signup?error=Passwords+be+8+characters+or+more')
 
-        hashed_password = bcrypt.generate_password_hash(password)     # password gets jumbled preventing it from
-                                                                      # being able to be hacked and used.
+        # password gets jumbled preventing it from being able to be hacked and used.
+        hashed_password = bcrypt.generate_password_hash(password)
 
         con = create_connection(DATABASE)     # creates the connection with the desired database file.
 
-        query = "INSERT INTO user(id, fname, lname, email, password) VALUES(NULL,?,?,?,?)"     # inserts into "user".
+        query = "INSERT INTO users(id, fname, lname, email, password) VALUES(NULL,?,?,?,?)"     # inserts into "users".
 
         cur = con.cursor()
         try:
@@ -90,9 +98,10 @@ def render_signup_page():
         con.close()
         return redirect("/login")
     error = request.args.get('error')
-    if error == None:
+    if error is None:
         error = ""
     return render_template("signup.html", error=error)
+
 
 # User Login
 @app.route('/login', methods=["GET", "POST"])
@@ -124,6 +133,7 @@ def render_login_page():
         return redirect('/')
     return render_template("login.html", logged_in=is_logged_in(), categories=categories())
 
+
 # User Logout
 @app.route('/logout')
 def logout():
@@ -132,7 +142,8 @@ def logout():
     print(list(session.keys()))
     return redirect('/?message=See+you+next+time!')
 
-# User can add a Catergory
+
+# User can add a Category
 @app.route('/add_category', methods=["GET", "POST"])
 def render_add_category_page():
     if request.method == 'POST':
@@ -149,34 +160,34 @@ def render_add_category_page():
         con.close()
         return redirect("/")
     error = request.args.get('error')
-    if error == None:
+    if error is None:
         error = ""
-    return render_template("add_category.html", error=error, logged_in=is_logged_in(), categories=categories())
+    return render_template("add_category.html", error=error,
+                           logged_in=is_logged_in(), categories=categories())
+
 
 # Displaying the Category page
-@app.route('/category/<Cat_id>')
-def render_category_page(Cat_id):
+@app.route('/category/<cat_id>')
+def render_category_page(cat_id):
     con = create_connection(DATABASE)
 
-# Displaying the contents for the specified category
-    query = """SELECT id, Maori, English, Cat_id, Definition, Level, Image, date FROM dictionary 
-            WHERE Cat_id=?"""
+# Fetching the contents for the specified category
+    query = """SELECT id, Maori, English, cat_id, Definition,
+               Level, Image, date FROM dictionary WHERE cat_id=?"""
     cur = con.cursor()
-    cur.execute(query, Cat_id,)
+    cur.execute(query, cat_id,)
     contents = cur.fetchall()
 
     query = "SELECT id, category_name FROM categories WHERE id=?"
     cur = con.cursor()
-    cur.execute(query, Cat_id,)
+    cur.execute(query, cat_id,)
     specific_category = cur.fetchall()
     con.commit()
     con.close()
 
-    return render_template('category.html', contents = contents,
-                           specific_category = specific_category,
-                           categories = categories(),
-                           Cat_id = int(Cat_id),
-                           logged_in=is_logged_in())
+    return render_template('category.html', contents=contents, specific_category=specific_category,
+                           categories=categories(), cat_id=int(cat_id), logged_in=is_logged_in())
+
 
 # Running the app
 if __name__ == '__main__':
