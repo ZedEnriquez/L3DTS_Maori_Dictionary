@@ -175,13 +175,13 @@ def render_category_page(cat_id):
     query = """SELECT id, Maori, English, cat_id, Definition,
                Level, Image, date FROM dictionary WHERE cat_id=?"""
     cur = con.cursor()
-    cur.execute(query, cat_id)
+    cur.execute(query, (cat_id,))
     contents = cur.fetchall()
 
 # Fetching the id's of each category
     query = "SELECT id, category_name FROM categories WHERE id=?"
     cur = con.cursor()
-    cur.execute(query, cat_id)
+    cur.execute(query, (cat_id,))
     specific_category = cur.fetchall()
     con.commit()
     con.close()
@@ -199,7 +199,7 @@ def render_word_page(word_id):
     query = """SELECT id, Maori, English, cat_id, Definition,
                    Level, Image, date FROM dictionary WHERE cat_id=?"""
     cur = con.cursor()
-    cur.execute(query, word_id)
+    cur.execute(query, (word_id,))
     word_content= cur.fetchall()
     con.commit()
     con.close()
