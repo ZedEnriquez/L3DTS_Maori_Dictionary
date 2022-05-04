@@ -5,21 +5,17 @@
     <tr>
         <th>Maori</th>
         <th>English</th>
-        <th>Definition</th>
-        <th>Level</th>
         <th>Image</th>
-        <th>Date</th>
+
     </tr>
     <tbody>
     {% for content in contents %}
 
     <tr>
-        <td><a href="\word\{{ content[0] }}">{{ content[1] }}</a></td>
+        <td><a href="/word/{{ content[0] }}">{{ content[1] }}</a></td>
         <td>{{ content[2] }}</td>
-        <td>{{ content[4] }}</td>
-        <td>{{ content[5] }}</td>
         <td>{{ content[6] }}</td>
-        <td>{{ content[7] }}</td>
+
     </tr>
     {% endfor %}
     </tbody>

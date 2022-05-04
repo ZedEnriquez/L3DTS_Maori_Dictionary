@@ -175,12 +175,13 @@ def render_category_page(cat_id):
     query = """SELECT id, Maori, English, cat_id, Definition,
                Level, Image, date FROM dictionary WHERE cat_id=?"""
     cur = con.cursor()
-    cur.execute(query, cat_id,)
+    cur.execute(query, cat_id)
     contents = cur.fetchall()
 
+# Fetching the id's of each category
     query = "SELECT id, category_name FROM categories WHERE id=?"
     cur = con.cursor()
-    cur.execute(query, cat_id,)
+    cur.execute(query, cat_id)
     specific_category = cur.fetchall()
     con.commit()
     con.close()
@@ -188,6 +189,23 @@ def render_category_page(cat_id):
     return render_template('category.html', contents=contents, specific_category=specific_category,
                            categories=categories(), cat_id=int(cat_id), logged_in=is_logged_in())
 
+
+# Displaying the specified word
+@app.route('/word/<word_id>')
+def render_word_page(word_id):
+    con = create_connection(DATABASE)
+
+    # Fetching the contents for the specified category
+    query = """SELECT id, Maori, English, cat_id, Definition,
+                   Level, Image, date FROM dictionary WHERE cat_id=?"""
+    cur = con.cursor()
+    cur.execute(query, word_id)
+    word_content= cur.fetchall()
+    con.commit()
+    con.close()
+
+    return render_template('word.html', word_content=word_content, categories=categories(),
+                           word_id=int(word_id), logged_in=is_logged_in())
 
 # Running the app
 if __name__ == '__main__':
