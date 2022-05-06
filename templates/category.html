@@ -9,16 +9,42 @@
 
     </tr>
     <tbody>
-    {% for content in contents %}
-
-    <tr>
-        <td><a href="/word/{{ content[0] }}">{{ content[1] }}</a></td>
-        <td>{{ content[2] }}</td>
-        <td>{{ content[6] }}</td>
-
-    </tr>
-    {% endfor %}
+        {% for content in contents %}
+            <tr>
+                <td><a href="/word/{{ content[0] }}">{{ content[1] }}</a></td>
+                <td>{{ content[2] }}</td>
+                <td><img src="/static/images/{{contents[0][6]}}"class=thumb></td>
+            </tr>
+        {% endfor %}
     </tbody>
 </table>
+<form class="dataForm" method="POST">
+
+    <div class = "form-group">
+        <div class="form-label">Maori Word:</div>
+        <div class="form-element"><input id="maori" name="maori" type="text" required></div>
+    </div>
+
+    <div class = "form-group">
+        <div class="form-label">English Translation:</div>
+        <div class="form-element"><input id="english" name="english" type="text" required></div>
+    </div>
+
+    <div class = "form-group">
+        <div class="form-label">Level:</div>
+        <div class="form-element"><input id="level" name="level" type="text" required></div>
+    </div>
+
+    <div class = "form-group">
+        <div class="form-label">Definition:</div>
+        <div class="form-element"><textarea id="definition" name="definition" type="text" required></textarea></div>
+    </div>
+
+    <div class="button-group">
+        <input type="submit" value="Submit">
+        <input type="reset" value="Reset">
+    </div>
+
+</form>
 {% endblock %}
 
