@@ -1,29 +1,28 @@
 {% extends "base.html" %}
+
 {% block main %}
 
 {% block heading %}
-
+<h2>{{word_content[0][1]}} ({{word_content[0][2]}}) </h2>
 {% endblock %}
 
 <table>
-
-<thead>
-    <tr>
-        <td>Maori</td>
-        <td>English</td>
-        <td>Image</td>
-    </tr>
-</thead>
-
     <tbody>
-    <tr>
-        <td>{{word_content[0][1]}}</td>
-        <td>{{word_content[0][2]}}</td>
+        <td>Definition: {{word_content[0][4]}} </td>
+    </tbody>
+    <tbody>
+        <td>Level: {{word_content[0][5]}} </td>
+    </tbody>
+     <tbody>
+        <td>Date Added: {{word_content[0][7]}} </td>
+    </tbody>
+    <tbody>
+        <td>Edited by: {{word_content[0][8]}} </td>
+    </tbody>
+    <tbody>
         <td><img src="/static/images/{{word_content[0][6]}}"class=thumb</td>
-    </tr>
-</tbody>
+    </tbody>
 </table>
-
 
 {% endblock %}
 

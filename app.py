@@ -167,24 +167,35 @@ def render_add_category_page():
 
 
 # Displaying the Category page
-@app.route('/category/<cat_id>')
+@app.route('/category/<cat_id>', methods=["GET", "POST"])
 def render_category_page(cat_id):
     con = create_connection(DATABASE)
 
-# Fetching the contents for the specified category
+    # Fetching the contents for the specified category
     query = """SELECT id, Maori, English, cat_id, Definition,
                Level, Image, date FROM dictionary WHERE cat_id=?"""
     cur = con.cursor()
     cur.execute(query, (cat_id,))
     contents = cur.fetchall()
 
-# Fetching the id's of each category
+    # Fetching the id's of each category
     query = "SELECT id, category_name FROM categories WHERE id=?"
     cur = con.cursor()
     cur.execute(query, (cat_id,))
     specific_category = cur.fetchall()
+
+    # The Add a new word function at the bottom of the page
+    if request.method == 'POST':     # Post is the method used after submitting your details.
+        print(request.form)
+        new_maori = request.form.get('maori').strip().title()     # .get: Websites gets the information.
+        new_english = request.form.get('english').strip().title()     # .strip().title() Sanitizes the details.
+        new_definition = request.form.get('definition').strip()
+        new_level = request.form.get('level').strip()
+
     con.commit()
     con.close()
+
+    query = "INSERT INTO dictionary(id, Maori, English, Definition, Level) VALUES(NULL,?,?,?,?)"
 
     return render_template('category.html', contents=contents, specific_category=specific_category,
                            categories=categories(), cat_id=int(cat_id), logged_in=is_logged_in())
