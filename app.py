@@ -5,9 +5,9 @@ from flask import Flask, render_template, request, session, redirect
 import sqlite3
 from sqlite3 import Error
 from flask_bcrypt import Bcrypt
+from datetime import datetime
 
 # Unused Imports
-# from datetime import datetime
 # import smtplib, ssl
 # from smtplib import SMTPAuthenticationError
 # from email.mime.text import MIMEText
@@ -169,11 +169,27 @@ def render_add_category_page():
 # Displaying the Category page
 @app.route('/category/<cat_id>', methods=["GET", "POST"])
 def render_category_page(cat_id):
-    con = create_connection(DATABASE)
+    # The Add a new word function at the bottom of the page
+    if request.method == 'POST':     # Post is the method used after submitting your details.
+        print(request.form)
+        new_maori = request.form.get('maori').strip().title()     # .get: Websites gets the information.
+        new_english = request.form.get('english').strip().title()     # .strip().title() Sanitizes the details.
+        new_definition = request.form.get('definition').strip()
+        new_level = request.form.get('level').strip()
+        new_image = 'noimage.png'
+        new_date = datetime.now()
+        new_user = 1
+        con = create_connection(DATABASE)
+        query = "INSERT INTO dictionary (id, Maori, English, cat_id, Definition, Level, Image, date) VALUES(NULL,?,?,?,?,?,?,?)"
+        cur = con.cursor()
+        cur.execute(query, (new_maori, new_english, cat_id, new_definition, new_level, new_image, new_date,))
+        con.commit()
+        con.close()
+
 
     # Fetching the contents for the specified category
-    query = """SELECT id, Maori, English, cat_id, Definition,
-               Level, Image, date FROM dictionary WHERE cat_id=?"""
+    con = create_connection(DATABASE)
+    query = """SELECT id, Maori, English, cat_id, Definition,Level, Image, date FROM dictionary WHERE cat_id=?"""
     cur = con.cursor()
     cur.execute(query, (cat_id,))
     contents = cur.fetchall()
@@ -184,18 +200,7 @@ def render_category_page(cat_id):
     cur.execute(query, (cat_id,))
     specific_category = cur.fetchall()
 
-    # The Add a new word function at the bottom of the page
-    if request.method == 'POST':     # Post is the method used after submitting your details.
-        print(request.form)
-        new_maori = request.form.get('maori').strip().title()     # .get: Websites gets the information.
-        new_english = request.form.get('english').strip().title()     # .strip().title() Sanitizes the details.
-        new_definition = request.form.get('definition').strip()
-        new_level = request.form.get('level').strip()
 
-    con.commit()
-    con.close()
-
-    query = "INSERT INTO dictionary(id, Maori, English, Definition, Level) VALUES(NULL,?,?,?,?)"
 
     return render_template('category.html', contents=contents, specific_category=specific_category,
                            categories=categories(), cat_id=int(cat_id), logged_in=is_logged_in())
