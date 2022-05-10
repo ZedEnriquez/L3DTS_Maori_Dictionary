@@ -93,7 +93,6 @@ def render_signup_page():
             cur.execute(query, (fname, lname, email, hashed_password))
         except sqlite3.IntegrityError:
             return redirect('/signup?error=email+is+already+used')
-
         con.commit()
         con.close()
         return redirect("/login")
@@ -180,12 +179,12 @@ def render_category_page(cat_id):
         new_date = datetime.now()
         new_user = 1
         con = create_connection(DATABASE)
-        query = "INSERT INTO dictionary (id, Maori, English, cat_id, Definition, Level, Image, date) VALUES(NULL,?,?,?,?,?,?,?)"
+        query = "INSERT INTO dictionary (id, Maori, English, cat_id, " \
+                "Definition, Level, Image, date) VALUES(NULL,?,?,?,?,?,?,?)"
         cur = con.cursor()
         cur.execute(query, (new_maori, new_english, cat_id, new_definition, new_level, new_image, new_date,))
         con.commit()
         con.close()
-
 
     # Fetching the contents for the specified category
     con = create_connection(DATABASE)
@@ -199,14 +198,11 @@ def render_category_page(cat_id):
     cur = con.cursor()
     cur.execute(query, (cat_id,))
     specific_category = cur.fetchall()
-
-
-
     return render_template('category.html', contents=contents, specific_category=specific_category,
                            categories=categories(), cat_id=int(cat_id), logged_in=is_logged_in())
 
 
-# Displaying the specified word
+# Displaying the specific word
 @app.route('/word/<word_id>')
 def render_word_page(word_id):
     con = create_connection(DATABASE)
@@ -216,10 +212,9 @@ def render_word_page(word_id):
                    Level, Image, date FROM dictionary WHERE cat_id=?"""
     cur = con.cursor()
     cur.execute(query, (word_id,))
-    word_content= cur.fetchall()
+    word_content = cur.fetchall()
     con.commit()
     con.close()
-
     return render_template('word.html', word_content=word_content, categories=categories(),
                            word_id=int(word_id), logged_in=is_logged_in())
 
