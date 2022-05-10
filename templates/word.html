@@ -1,10 +1,7 @@
 {% extends "base.html" %}
 
-
 {% block main %}
-    # If cat id is == cat id or something like that.
-
-    {% block heading %}<h2>{{word_content[0][1]}} ({{word_content[0][2]}}) </h2>{% end block %}
+    {% block heading %}<h2>{{word_content[0][1]}} ({{word_content[0][2]}}) </h2>{% endblock %}
     <table>
         <tbody>
             <td>Definition: {{word_content[0][4]}} </td>
@@ -22,5 +19,5 @@
             <td><img src="/static/images/{{word_content[0][6]}}" class=thumb</td>
         </tbody>
     </table>
-{% end block %}
+{% endblock %}
 
