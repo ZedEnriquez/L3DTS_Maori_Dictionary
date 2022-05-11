@@ -18,7 +18,6 @@ app = Flask(__name__)
 app.secret_key = "twentyone"
 DATABASE = 'maori_dictionary.db'
 
-
 # Bcrypt is used to hash the user's passwords.
 bcrypt = Bcrypt(app)
 
@@ -97,10 +96,10 @@ def render_signup_page():
 
         con = create_connection(DATABASE)     # creates the connection with the desired database file.
 
-        query = "INSERT INTO users (id, fname, lname, email, password, vip) VALUES(NULL,?,?,?,?,?)"     # inserts into "users".
+        # inserts into "users".
+        query = "INSERT INTO users (id, fname, lname, email, password, vip) VALUES(NULL,?,?,?,?,?)"
 
         cur = con.cursor()
-
         try:
             cur.execute(query, (fname, lname, email, hashed_password, vip))
         except sqlite3.IntegrityError:
