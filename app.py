@@ -54,13 +54,13 @@ def is_logged_in():
         return True
 
 
-# Checking the vip state
-def is_vip():
-    if not is_logged_in() or (session.get("vip") is (None or 0)):
-        print("A vip isn't logged in")
+# Checking if the user is a teacher
+def is_teacher():
+    if (session.get("teacher") is (None or 0)):
+        print("A teacher isn't logged in")
         return False
     else:
-        print("Vip is logged in")
+        print("A Teacher is logged in")
         return True
 
 
@@ -68,7 +68,7 @@ def is_vip():
 @app.route('/')
 def render_homepage():
     return render_template("home.html", logged_in=is_logged_in(),
-                           categories=categories())
+                           categories=categories(),teacher_perm=is_teacher() )
 
 
 # User Signup
@@ -83,7 +83,7 @@ def render_signup_page():
         email = request.form.get('email').strip().lower()
         password = request.form.get('password')
         password2 = request.form.get('password2')
-        vip = request.form.get('vip')
+        teacher = request.form.get('teacher')
 
         if password != password2:     # Notifies the user that there is an input problem.
             return redirect('/signup?error=Passwords+dont+match')
@@ -95,13 +95,10 @@ def render_signup_page():
         hashed_password = bcrypt.generate_password_hash(password)
 
         con = create_connection(DATABASE)     # creates the connection with the desired database file.
-
-        # inserts into "users".
-        query = "INSERT INTO users (id, fname, lname, email, password, vip) VALUES(NULL,?,?,?,?,?)"
-
+        query = "INSERT INTO users(id, fname, lname, email, password, teacher) VALUES(NULL,?,?,?,?,?)"     # inserts into "users".
         cur = con.cursor()
         try:
-            cur.execute(query, (fname, lname, email, hashed_password, vip))
+            cur.execute(query, (fname, lname, email, hashed_password, teacher))
         except sqlite3.IntegrityError:
             return redirect('/signup?error=email+is+already+used')
         con.commit()
@@ -132,7 +129,7 @@ def render_login_page():
             userid = user_data[0][0]
             firstname = user_data[0][1]
             db_password = user_data[0][2]
-            vip = user_data[0][5]
+            teacher = user_data[0][5]
         except IndexError:
             return redirect("/login?error=Email+invalid+or+password+incorrect")
         if not bcrypt.check_password_hash(db_password, password):
@@ -140,10 +137,10 @@ def render_login_page():
         session['email'] = email
         session['userid'] = userid
         session['firstname'] = firstname
-        session['vip'] = vip
+        session['teacher']= teacher
         print(session)
         return redirect('/')
-    return render_template("login.html", logged_in=is_logged_in(), categories=categories(), vip_perm=is_vip())
+    return render_template("login.html", logged_in=is_logged_in(), categories=categories(), teacher_perm=is_teacher())
 
 
 # User Logout
@@ -175,12 +172,13 @@ def render_add_category_page():
     if error is None:
         error = ""
     return render_template("add_category.html", error=error,
-                           logged_in=is_logged_in(), categories=categories())
+                           logged_in=is_logged_in(), categories=categories(), teacher_perm=is_teacher())
 
 
 # Displaying the Category page
 @app.route('/category/<cat_id>', methods=["GET", "POST"])
 def render_category_page(cat_id):
+
     # The Add a new word function at the bottom of the page
     if request.method == 'POST':     # Post is the method used after submitting your details.
         print(request.form)
@@ -205,6 +203,7 @@ def render_category_page(cat_id):
     cur = con.cursor()
     cur.execute(query, (cat_id,))
     contents = cur.fetchall()
+
     print(contents[0][0])
     # Fetching the id's of each category
     query = "SELECT id, category_name FROM categories WHERE id=?"
@@ -212,7 +211,8 @@ def render_category_page(cat_id):
     cur.execute(query, (cat_id,))
     specific_category = cur.fetchall()
     return render_template('category.html', contents=contents, specific_category=specific_category,
-                           categories=categories(), cat_id=int(cat_id), logged_in=is_logged_in())
+                           categories=categories(), cat_id=int(cat_id), logged_in=is_logged_in(),
+                           teacher_perm=is_teacher())
 
 
 # Displaying the specific word
@@ -222,14 +222,15 @@ def render_word_page(word_id):
 
     # Fetching the contents for the specified category
     query = """SELECT id, Maori, English, cat_id, Definition,
-                   Level, Image, date FROM dictionary WHERE id=?"""
+                   Level, Image, date FROM dictionary WHERE cat_id=?"""
+
     cur = con.cursor()
     cur.execute(query, (word_id,))
     word_content = cur.fetchall()
     con.commit()
     con.close()
     return render_template('word.html', word_content=word_content, categories=categories(),
-                           word_id=int(word_id), logged_in=is_logged_in())
+                           word_id=int(word_id), logged_in=is_logged_in(),teacher_perm=is_teacher())
 
 
 # Running the app
