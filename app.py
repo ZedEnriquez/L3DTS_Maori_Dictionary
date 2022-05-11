@@ -55,6 +55,16 @@ def is_logged_in():
         return True
 
 
+# Checking the vip state
+def is_vip():
+    if not is_logged_in() or (session.get("vip") is (None or 0)):
+        print("A vip isn't logged in")
+        return False
+    else:
+        print("Vip is logged in")
+        return True
+
+
 # Homepage
 @app.route('/')
 def render_homepage():
@@ -74,6 +84,7 @@ def render_signup_page():
         email = request.form.get('email').strip().lower()
         password = request.form.get('password')
         password2 = request.form.get('password2')
+        vip = request.form.get('vip')
 
         if password != password2:     # Notifies the user that there is an input problem.
             return redirect('/signup?error=Passwords+dont+match')
@@ -86,11 +97,12 @@ def render_signup_page():
 
         con = create_connection(DATABASE)     # creates the connection with the desired database file.
 
-        query = "INSERT INTO users(id, fname, lname, email, password) VALUES(NULL,?,?,?,?)"     # inserts into "users".
+        query = "INSERT INTO users (id, fname, lname, email, password, vip) VALUES(NULL,?,?,?,?,?)"     # inserts into "users".
 
         cur = con.cursor()
+
         try:
-            cur.execute(query, (fname, lname, email, hashed_password))
+            cur.execute(query, (fname, lname, email, hashed_password, vip))
         except sqlite3.IntegrityError:
             return redirect('/signup?error=email+is+already+used')
         con.commit()
@@ -121,6 +133,7 @@ def render_login_page():
             userid = user_data[0][0]
             firstname = user_data[0][1]
             db_password = user_data[0][2]
+            vip = user_data[0][5]
         except IndexError:
             return redirect("/login?error=Email+invalid+or+password+incorrect")
         if not bcrypt.check_password_hash(db_password, password):
@@ -128,9 +141,10 @@ def render_login_page():
         session['email'] = email
         session['userid'] = userid
         session['firstname'] = firstname
+        session['vip'] = vip
         print(session)
         return redirect('/')
-    return render_template("login.html", logged_in=is_logged_in(), categories=categories())
+    return render_template("login.html", logged_in=is_logged_in(), categories=categories(), vip_perm=is_vip())
 
 
 # User Logout
@@ -188,7 +202,7 @@ def render_category_page(cat_id):
 
     # Fetching the contents for the specified category
     con = create_connection(DATABASE)
-    query = """SELECT id, Maori, English, cat_id, Definition,Level, Image, date FROM dictionary WHERE cat_id=?"""
+    query = """SELECT id, Maori, English, cat_id, Definition, Level, Image, date FROM dictionary WHERE cat_id=?"""
     cur = con.cursor()
     cur.execute(query, (cat_id,))
     contents = cur.fetchall()
