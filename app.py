@@ -56,7 +56,7 @@ def is_logged_in():
 
 # Checking if the user is a teacher
 def is_teacher():
-    if  session.get("teacher") == 0:
+    if session.get("teacher") == 0:
         print("A teacher isn't logged in")
         return False
     else:
@@ -102,7 +102,7 @@ def render_signup_page():
         try:
             cur.execute(query, (fname, lname, email, hashed_password, teacher))
         except sqlite3.IntegrityError:
-            return redirect('/signup?error=email+is+already+used')
+            return redirect('/signup?error=Email+is+already+used')
         con.commit()
         con.close()
         return redirect("/login")
@@ -154,7 +154,7 @@ def logout():
     return redirect('/?message=See+you+next+time!')
 
 
-# User can add a Category
+# User can add a category
 @app.route('/add_category', methods=["GET", "POST"])
 def render_add_category_page():
     if is_teacher() == 0:
@@ -177,6 +177,24 @@ def render_add_category_page():
         error = ""
     return render_template("add_category.html", error=error,
                            logged_in=is_logged_in(), categories=categories(), teacher_perm=is_teacher())
+
+
+# User can delete a category
+@app.route('/remove_category/<cat_id>')
+def render_remove_category(cat_id):
+    if not is_logged_in():
+        return redirect('/?error=Not+logged+in')
+    if not is_teacher():
+        return redirect('/?error=Teacher+is+not+logged+in')
+    con = create_connection(DATABASE)
+    cur = con.cursor()
+    query = "SELECT id, category_name FROM categories WHERE id=?"
+    cur.execute(query, (cat_id,))
+    categories_obtained = cur.fetchall()
+    con.close()
+
+    return render_template('remove_category.html', category_info=categories_obtained, categories=categories(),
+                           logged_in=is_logged_in(), teacher_perm=is_teacher())
 
 
 # Displaying the Category page
@@ -208,7 +226,6 @@ def render_category_page(cat_id):
     cur.execute(query, (cat_id,))
     contents = cur.fetchall()
 
-    print(contents[0][0])
     # Fetching the id's of each category
     query = "SELECT id, category_name FROM categories WHERE id=?"
     cur = con.cursor()
