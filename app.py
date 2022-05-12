@@ -56,7 +56,7 @@ def is_logged_in():
 
 # Checking if the user is a teacher
 def is_teacher():
-    if (session.get("teacher") is (None or 0)):
+    if  session.get("teacher") == 0:
         print("A teacher isn't logged in")
         return False
     else:
@@ -68,7 +68,7 @@ def is_teacher():
 @app.route('/')
 def render_homepage():
     return render_template("home.html", logged_in=is_logged_in(),
-                           categories=categories(),teacher_perm=is_teacher() )
+                           categories=categories(), teacher_perm=is_teacher())
 
 
 # User Signup
@@ -95,7 +95,9 @@ def render_signup_page():
         hashed_password = bcrypt.generate_password_hash(password)
 
         con = create_connection(DATABASE)     # creates the connection with the desired database file.
-        query = "INSERT INTO users(id, fname, lname, email, password, teacher) VALUES(NULL,?,?,?,?,?)"     # inserts into "users".
+
+        # inserts into "users".
+        query = "INSERT INTO users(id, fname, lname, email, password, teacher) VALUES(NULL,?,?,?,?,?)"
         cur = con.cursor()
         try:
             cur.execute(query, (fname, lname, email, hashed_password, teacher))
@@ -119,7 +121,7 @@ def render_login_page():
         print(request.form)
         email = request.form['email'].strip().lower()
         password = request.form['password'].strip()
-        query = """SELECT id, fname, password FROM users WHERE email = ?"""
+        query = "SELECT id, fname, password, teacher FROM users WHERE email = ?"
         con = create_connection(DATABASE)
         cur = con.cursor()
         cur.execute(query, (email,))
@@ -129,7 +131,7 @@ def render_login_page():
             userid = user_data[0][0]
             firstname = user_data[0][1]
             db_password = user_data[0][2]
-            teacher = user_data[0][5]
+            teacher = user_data[0][3]
         except IndexError:
             return redirect("/login?error=Email+invalid+or+password+incorrect")
         if not bcrypt.check_password_hash(db_password, password):
@@ -137,7 +139,7 @@ def render_login_page():
         session['email'] = email
         session['userid'] = userid
         session['firstname'] = firstname
-        session['teacher']= teacher
+        session['teacher'] = teacher
         print(session)
         return redirect('/')
     return render_template("login.html", logged_in=is_logged_in(), categories=categories(), teacher_perm=is_teacher())
@@ -222,7 +224,7 @@ def render_word_page(word_id):
 
     # Fetching the contents for the specified category
     query = """SELECT id, Maori, English, cat_id, Definition,
-                   Level, Image, date FROM dictionary WHERE cat_id=?"""
+                   Level, Image, date FROM dictionary WHERE id=?"""
 
     cur = con.cursor()
     cur.execute(query, (word_id,))
@@ -230,7 +232,7 @@ def render_word_page(word_id):
     con.commit()
     con.close()
     return render_template('word.html', word_content=word_content, categories=categories(),
-                           word_id=int(word_id), logged_in=is_logged_in(),teacher_perm=is_teacher())
+                           word_id=int(word_id), logged_in=is_logged_in(), teacher_perm=is_teacher())
 
 
 # Running the app

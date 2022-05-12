@@ -6,19 +6,20 @@
         <tr>
             <th>Maori</th>
             <th>English</th>
-            <th>Image</th>
+            <th>Date added</th>
         </tr>
         <tbody>
             {% for content in contents %}
                 <tr>
                     <td><a href="/word/{{ content[0] }}">{{ content[1] }}</a></td>
                     <td>{{ content[2] }}</td>
-                    <td><img src="/static/images/{{contents[0][6]}}"class=thumb></td>
+                    <td>{{ content[7] }}</td>
                 </tr>
             {% endfor %}
         </tbody>
     </table>
 
+    {% if teacher_perm %}
     <form class="dataForm" method="POST">
     <h2>Add a new word </h2>
         <div class = "form-group">
@@ -42,5 +43,6 @@
             <input type="reset" value="Reset">
         </div>
     </form>
+    {% endif %}
 {% endblock %}
 
