@@ -157,6 +157,8 @@ def logout():
 # User can add a Category
 @app.route('/add_category', methods=["GET", "POST"])
 def render_add_category_page():
+    if is_teacher() == 0:
+        return redirect('/')
     if request.method == 'POST':
         print(request.form)
         cat_name = request.form['category_name'].strip().title()
