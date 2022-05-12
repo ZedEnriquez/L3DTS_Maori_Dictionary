@@ -3,7 +3,13 @@
 {% block main %}
     <table>
         <h2>{{ specific_category[0][1] }}</h2>
-        <h3><a href="/remove_category/{{ categories[0] }}">Remove category</a></h3>
+
+        {% if logged_in %}
+            {% if teacher_perm %}
+                <h3><a href="/remove_category/{{ categories[0] }}">Remove category</a></h3>
+            {% endif %}
+        {% endif %}
+
         <tr>
             <th>Maori</th>
             <th>English</th>
