@@ -2,23 +2,33 @@
 
 {% block main %}
     <table>
-        <h2>{{ specific_category[0][1] }}</h2>
+        <h2>{{ categories_obtained[cat_id - 1][1] }}</h2>
+
+        {% if logged_in %}
+            {% if teacher_perm %}
+                <h3><a href="/remove_category/{{ categories_obtained[0][0] }}">Remove category</a></h3>
+            {% endif %}
+        {% endif %}
+
         <tr>
             <th>Maori</th>
             <th>English</th>
-            <th>Image</th>
+            <th>Date added</th>
         </tr>
         <tbody>
             {% for content in contents %}
                 <tr>
                     <td><a href="/word/{{ content[0] }}">{{ content[1] }}</a></td>
                     <td>{{ content[2] }}</td>
-                    <td><img src="/static/images/{{contents[0][6]}}"class=thumb></td>
+                    <td>{{ content[7] }}</td>
                 </tr>
             {% endfor %}
         </tbody>
     </table>
 
+
+
+    {% if teacher_perm %}
     <form class="dataForm" method="POST">
     <h2>Add a new word </h2>
         <div class = "form-group">
@@ -31,9 +41,15 @@
         </div>
         <div class = "form-group">
             <div class="form-label">Level:</div>
-                {% for i range(10) %}
-                    <div class="form-element"><input value = "{{ i + 1 }}" name="level" type="radio" required></div>
-                {% endfor %}
+            <div class="form-element"><input id="level" name="level" type="text" required></div>
+
+
+
+            <!--    {% for i in range(10) %} -->
+           <!--  <div class="form-element">
+           <input value = "{{ i + 1 }}" name="level" type="radio" required><a>"{{ i + 1 }}" </a></div>-->
+            <!-- {% endfor %} -->
+
         </div>
         <div class = "form-group">
             <div class="form-label">Definition:</div>
@@ -44,5 +60,9 @@
             <input type="reset" value="Reset">
         </div>
     </form>
+    {% endif %}
+
+
+
 {% endblock %}
 

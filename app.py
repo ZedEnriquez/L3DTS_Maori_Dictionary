@@ -16,7 +16,7 @@ from datetime import datetime
 # Necessary Code
 app = Flask(__name__)
 app.secret_key = "twentyone"
-DATABASE = 'maori_dictionary-LAPTOP-8S833RNB.db'
+DATABASE = 'maori_dictionary.db'
 
 # Bcrypt is used to hash the user's passwords.
 bcrypt = Bcrypt(app)
@@ -56,7 +56,7 @@ def is_logged_in():
 
 # Checking if the user is a teacher
 def is_teacher():
-    if session.get("teacher") is (None or 0):
+    if session.get("teacher") == 0:
         print("A teacher isn't logged in")
         return False
     else:
@@ -68,7 +68,7 @@ def is_teacher():
 @app.route('/')
 def render_homepage():
     return render_template("home.html", logged_in=is_logged_in(),
-                           categories=categories(), teacher_perm=is_teacher())
+                           categories_obtained=categories(), teacher_perm=is_teacher())
 
 
 # User Signup
@@ -102,14 +102,14 @@ def render_signup_page():
         try:
             cur.execute(query, (fname, lname, email, hashed_password, teacher))
         except sqlite3.IntegrityError:
-            return redirect('/signup?error=email+is+already+used')
+            return redirect('/signup?error=Email+is+already+used')
         con.commit()
         con.close()
         return redirect("/login")
     error = request.args.get('error')
     if error is None:
         error = ""
-    return render_template("signup.html", error=error)
+    return render_template("signup.html", error=error, categories_obtained=categories())
 
 
 # User Login
@@ -117,23 +117,21 @@ def render_signup_page():
 def render_login_page():
     if is_logged_in():
         return redirect('/')
-
     if request.method == 'POST':
         print(request.form)
         email = request.form['email'].strip().lower()
         password = request.form['password'].strip()
-        teacher = request.form['teacher']
-        query = """SELECT id, fname, password, teacher FROM users WHERE email = ?"""
+        query = "SELECT id, fname, password, teacher FROM users WHERE email = ?"
         con = create_connection(DATABASE)
         cur = con.cursor()
-        cur.execute(query, (email, password, teacher,))
+        cur.execute(query, (email,))
         user_data = cur.fetchall()
         con.close()
         try:
             userid = user_data[0][0]
             firstname = user_data[0][1]
             db_password = user_data[0][2]
-            teacher = user_data[0][5]
+            teacher = user_data[0][3]
         except IndexError:
             return redirect("/login?error=Email+invalid+or+password+incorrect")
         if not bcrypt.check_password_hash(db_password, password):
@@ -144,7 +142,8 @@ def render_login_page():
         session['teacher'] = teacher
         print(session)
         return redirect('/')
-    return render_template("login.html", logged_in=is_logged_in(), categories=categories(), teacher_perm=is_teacher())
+    return render_template("login.html", logged_in=is_logged_in(),
+                           categories_obtained=categories(), teacher_perm=is_teacher())
 
 
 # User Logout
@@ -156,9 +155,11 @@ def logout():
     return redirect('/?message=See+you+next+time!')
 
 
-# User can add a Category
+# User can add a category
 @app.route('/add_category', methods=["GET", "POST"])
 def render_add_category_page():
+    if is_teacher() == 0:
+        return redirect('/')
     if request.method == 'POST':
         print(request.form)
         cat_name = request.form['category_name'].strip().title()
@@ -176,7 +177,18 @@ def render_add_category_page():
     if error is None:
         error = ""
     return render_template("add_category.html", error=error,
-                           logged_in=is_logged_in(), categories=categories(), teacher_perm=is_teacher())
+                           logged_in=is_logged_in(), categories_obtained=categories(), teacher_perm=is_teacher())
+
+
+# User can delete a category
+@app.route('/remove_category/<cat_id>')
+def render_remove_category(cat_id):
+    if not is_logged_in():
+        return redirect('/?error=Not+logged+in')
+    if not is_teacher():
+        return redirect('/?error=Teacher+is+not+logged+in')
+    return render_template('remove_category.html', categories_obtained=categories(),
+                           logged_in=is_logged_in(), teacher_perm=is_teacher(), )
 
 
 # Displaying the Category page
@@ -208,14 +220,8 @@ def render_category_page(cat_id):
     cur.execute(query, (cat_id,))
     contents = cur.fetchall()
 
-    print(contents[0][0])
-    # Fetching the id's of each category
-    query = "SELECT id, category_name FROM categories WHERE id=?"
-    cur = con.cursor()
-    cur.execute(query, (cat_id,))
-    specific_category = cur.fetchall()
-    return render_template('category.html', contents=contents, specific_category=specific_category,
-                           categories=categories(), cat_id=int(cat_id), logged_in=is_logged_in(),
+    return render_template('category.html', contents=contents, categories_obtained=categories(),
+                           cat_id=int(cat_id), logged_in=is_logged_in(),
                            teacher_perm=is_teacher())
 
 
@@ -226,14 +232,14 @@ def render_word_page(word_id):
 
     # Fetching the contents for the specified category
     query = """SELECT id, Maori, English, cat_id, Definition,
-                   Level, Image, date FROM dictionary WHERE cat_id=?"""
+                   Level, Image, date FROM dictionary WHERE id=?"""
 
     cur = con.cursor()
     cur.execute(query, (word_id,))
     word_content = cur.fetchall()
     con.commit()
     con.close()
-    return render_template('word.html', word_content=word_content, categories=categories(),
+    return render_template('word.html', word_content=word_content, categories_obtained=categories(),
                            word_id=int(word_id), logged_in=is_logged_in(), teacher_perm=is_teacher())
 
 

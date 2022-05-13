@@ -23,14 +23,17 @@
 			<span></span>
 			<ul>
 				{% if logged_in %}
-					<li><a href="/add_category">Add a category</a></li>
+					<li><a href="/">ʕ•́ᴥ•̀ʔっ</a></li>
+						{% if teacher_perm %}
+						<li><a href="/add_category">Add a category</a></li>
+						{% endif %}
                     <li><a href="/logout">Logout</a></li>
 			</ul>
 
 			<a> ____________ </a>
 
 			<ul>
-					{% for categories in categories %}
+					{% for categories in categories_obtained %}
                	 	<li><a href="/category/{{ categories[0] }}">{{ categories[1] }}</a></li>
                	 	{% endfor %}}
 
