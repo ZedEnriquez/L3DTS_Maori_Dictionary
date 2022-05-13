@@ -181,14 +181,7 @@ def render_add_category_page():
 
 
 # User can delete a category
-@app.route('/remove_category/<cat_id>')
-def render_remove_category(cat_id):
-    if not is_logged_in():
-        return redirect('/?error=Not+logged+in')
-    if not is_teacher():
-        return redirect('/?error=Teacher+is+not+logged+in')
-    return render_template('remove_category.html', categories_obtained=categories(),
-                           logged_in=is_logged_in(), teacher_perm=is_teacher(), )
+
 
 
 # Displaying the Category page
@@ -223,6 +216,16 @@ def render_category_page(cat_id):
     return render_template('category.html', contents=contents, categories_obtained=categories(),
                            cat_id=int(cat_id), logged_in=is_logged_in(),
                            teacher_perm=is_teacher())
+
+
+@app.route('/remove_category/<cat_id>')
+def render_remove_category(cat_id):
+    if not is_logged_in():
+        return redirect('/?error=Not+logged+in')
+    if not is_teacher():
+        return redirect('/?error=Teacher+is+not+logged+in')
+    return render_template('remove_category.html', categories_obtained=categories(), cat_id=int(cat_id),
+                           logged_in=is_logged_in(), teacher_perm=is_teacher())
 
 
 # Displaying the specific word

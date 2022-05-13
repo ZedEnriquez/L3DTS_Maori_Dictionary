@@ -6,7 +6,7 @@
 
         {% if logged_in %}
             {% if teacher_perm %}
-                <h3><a href="/remove_category/{{ categories_obtained[0][0] }}">Remove category</a></h3>
+                <h3><a href="/remove_category/{{ categories_obtained[cat_id - 1][0]  }}">Remove category</a></h3>
             {% endif %}
         {% endif %}
 
