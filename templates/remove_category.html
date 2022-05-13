@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block main%}
+    <table>
+        <h2>{{ categories_obtained[1] }}</h2>
+
+        {% if logged_in %}
+            {% if teacher_perm %}
+                <h3><a href="/remove_category/{{ categories_obtained[0][1] }}">Remove category</a></h3>
+            {% endif %}
+        {% endif %}
+
+        <tr>
+            <th>Maori</th>
+            <th>English</th>
+            <th>Date added</th>
+        </tr>
+        <tbody>
+            {% for content in contents %}
+                <tr>
+                    <td><a href="/word/{{ content[0] }}">{{ content[1] }}</a></td>
+                    <td>{{ content[2] }}</td>
+                    <td>{{ content[7] }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock %}
