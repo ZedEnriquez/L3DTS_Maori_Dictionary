@@ -10,7 +10,7 @@ from datetime import datetime
 # Necessary Code
 app = Flask(__name__)
 app.secret_key = "twentyone"
-DATABASE = 'maori_dictionary.db'
+DATABASE = 'maori_dictionary - Copy.db'
 
 # Bcrypt is used to hash the user's passwords.
 bcrypt = Bcrypt(app)
@@ -72,7 +72,6 @@ def is_teacher():
 # Homepage
 @app.route('/')
 def render_homepage():
-    print(dictionary_data())
     return render_template("home.html", logged_in=is_logged_in(),
                            categories_obtained=categories(), teacher_perm=is_teacher())
 
@@ -214,13 +213,31 @@ def render_category_page(cat_id):
 
 # User can delete a category
 @app.route('/remove_category/<cat_id>')
-def render_remove_category(cat_id):
+def render_remove_category_page(cat_id):
     if not is_logged_in():
         return redirect('/?error=Not+logged+in')
     if not is_teacher():
         return redirect('/?error=Teacher+is+not+logged+in')
     return render_template('remove_category.html', categories_obtained=categories(), cat_id=int(cat_id),
                            logged_in=is_logged_in(), teacher_perm=is_teacher(), contents=dictionary_data())
+
+
+# Confirmation when you delete a category
+@app.route('/confirm_remove_category/<cat_id>')
+def render_confirm_remove_category_page(cat_id):
+    if not is_logged_in():
+        return redirect('/?error=Not+logged+in')
+
+    if not is_teacher():
+        return redirect('/?error=Teacher+is+not+logged+in')
+
+    con = create_connection(DATABASE)
+    query = "DELETE FROM categories WHERE id = ?"
+    cur = con.cursor()
+    cur.execute(query, (cat_id,))
+    con.commit()
+    con.close()
+    return redirect('/?The+category+has+been+removed')
 
 
 # Displaying the specific word
