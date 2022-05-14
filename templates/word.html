@@ -1,23 +1,32 @@
 {% extends "base.html" %}
 
 {% block main %}
-    {% block heading %}<h2>{{word_content[0][1]}} ({{word_content[0][2]}}) </h2>{% endblock %}
-    <table>
-        <tbody>
-            <td>Definition: {{word_content[0][4]}} </td>
-        </tbody>
-        <tbody>
-            <td>Level: {{word_content[0][5]}} </td>
-        </tbody>
-         <tbody>
-            <td>Date Added: {{word_content[0][7]}} </td>
-        </tbody>
-        <tbody>
-            <td>Edited by: {{word_content[0][8]}} </td>
-        </tbody>
-        <tbody>
-            <td><img src="/static/images/{{word_content[0][6]}}" class=thumb</td>
-        </tbody>
-    </table>
+
+
+    {% for word_content in contents %}
+        {% if word_content[0] == word_id %}
+            <h1>{{word_content[1]}}</h1>
+            <table>
+                <tbody>
+                    <td>Definition: {{word_content[4]}} </td>
+                </tbody>
+                <tbody>
+                    <td>Level: {{word_content[5]}} </td>
+                </tbody>
+                 <tbody>
+                    <td>Date Added: {{word_content[7]}} </td>
+                </tbody>
+                <tbody>
+                    <td>Edited by: {{word_content[8]}} </td>
+                </tbody>
+                <tbody>
+                    <td><img src="/static/images/{{word_content[6]}}" class=thumb</td>
+                </tbody>
+            </table>
+        {% endif %}
+
+
+    {% endfor %}
+
 {% endblock %}
 

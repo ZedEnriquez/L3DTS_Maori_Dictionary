@@ -5,6 +5,11 @@
     box-sizing: border-box;
 }
 
+.Panda{
+    padding:0;
+
+}
+
 #container {
     display: grid;
     grid-template-columns: 75px auto;

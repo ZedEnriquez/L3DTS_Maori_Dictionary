@@ -7,12 +7,6 @@ from sqlite3 import Error
 from flask_bcrypt import Bcrypt
 from datetime import datetime
 
-# Unused Imports
-# import smtplib, ssl
-# from smtplib import SMTPAuthenticationError
-# from email.mime.text import MIMEText
-# from email.mime.multipart import MIMEMultipart
-
 # Necessary Code
 app = Flask(__name__)
 app.secret_key = "twentyone"
@@ -31,6 +25,17 @@ def categories():
     category_list = cur.fetchall()
     con.close()
     return category_list
+
+
+# Fetching the contents for the specified category
+def dictionary_data():
+    con = create_connection(DATABASE)
+    query = "SELECT id, Maori, English, cat_id, Definition, Level, Image, date FROM dictionary "
+    cur = con.cursor()
+    cur.execute(query,)
+    contents = cur.fetchall()
+    con.close()
+    return contents
 
 
 # Connecting the database
@@ -67,6 +72,7 @@ def is_teacher():
 # Homepage
 @app.route('/')
 def render_homepage():
+    print(dictionary_data())
     return render_template("home.html", logged_in=is_logged_in(),
                            categories_obtained=categories(), teacher_perm=is_teacher())
 
@@ -176,12 +182,8 @@ def render_add_category_page():
     error = request.args.get('error')
     if error is None:
         error = ""
-    return render_template("add_category.html", error=error,
-                           logged_in=is_logged_in(), categories_obtained=categories(), teacher_perm=is_teacher())
-
-
-# User can delete a category
-
+    return render_template("add_category.html", error=error, logged_in=is_logged_in(),
+                           categories_obtained=categories(), teacher_perm=is_teacher())
 
 
 # Displaying the Category page
@@ -205,19 +207,12 @@ def render_category_page(cat_id):
         cur.execute(query, (new_maori, new_english, cat_id, new_definition, new_level, new_image, new_date,))
         con.commit()
         con.close()
-
-    # Fetching the contents for the specified category
-    con = create_connection(DATABASE)
-    query = """SELECT id, Maori, English, cat_id, Definition, Level, Image, date FROM dictionary WHERE cat_id=?"""
-    cur = con.cursor()
-    cur.execute(query, (cat_id,))
-    contents = cur.fetchall()
-
-    return render_template('category.html', contents=contents, categories_obtained=categories(),
+    return render_template('category.html', contents=dictionary_data(), categories_obtained=categories(),
                            cat_id=int(cat_id), logged_in=is_logged_in(),
                            teacher_perm=is_teacher())
 
 
+# User can delete a category
 @app.route('/remove_category/<cat_id>')
 def render_remove_category(cat_id):
     if not is_logged_in():
@@ -225,25 +220,14 @@ def render_remove_category(cat_id):
     if not is_teacher():
         return redirect('/?error=Teacher+is+not+logged+in')
     return render_template('remove_category.html', categories_obtained=categories(), cat_id=int(cat_id),
-                           logged_in=is_logged_in(), teacher_perm=is_teacher())
+                           logged_in=is_logged_in(), teacher_perm=is_teacher(), contents=dictionary_data())
 
 
 # Displaying the specific word
 @app.route('/word/<word_id>')
 def render_word_page(word_id):
-    con = create_connection(DATABASE)
-
-    # Fetching the contents for the specified category
-    query = """SELECT id, Maori, English, cat_id, Definition,
-                   Level, Image, date FROM dictionary WHERE id=?"""
-
-    cur = con.cursor()
-    cur.execute(query, (word_id,))
-    word_content = cur.fetchall()
-    con.commit()
-    con.close()
-    return render_template('word.html', word_content=word_content, categories_obtained=categories(),
-                           word_id=int(word_id), logged_in=is_logged_in(), teacher_perm=is_teacher())
+    return render_template('word.html', contents=dictionary_data(), categories_obtained=categories(),
+                           logged_in=is_logged_in(), teacher_perm=is_teacher(), word_id=int(word_id))
 
 
 # Running the app

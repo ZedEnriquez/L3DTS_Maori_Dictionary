@@ -2,7 +2,7 @@
 
 {% block main %}
     <table>
-        <h2>{{ categories_obtained[cat_id - 1][1] }}</h2>
+        <h1>{{ categories_obtained[cat_id - 1][1] }}</h1>
 
         {% if logged_in %}
             {% if teacher_perm %}
@@ -17,11 +17,13 @@
         </tr>
         <tbody>
             {% for content in contents %}
-                <tr>
-                    <td><a href="/word/{{ content[0] }}">{{ content[1] }}</a></td>
-                    <td>{{ content[2] }}</td>
-                    <td>{{ content[7] }}</td>
-                </tr>
+                {% if content[3] == cat_id %}
+                    <tr>
+                        <td><a href="/word/{{ content[0] }}">{{ content[1] }}</a></td>
+                        <td>{{ content[2] }}</td>
+                        <td>{{ content[7] }}</td>
+                    </tr>
+                {% endif %}
             {% endfor %}
         </tbody>
     </table>
