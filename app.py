@@ -16,6 +16,17 @@ DATABASE = 'maori_dictionary - Copy.db'
 bcrypt = Bcrypt(app)
 
 
+# Connecting the database
+def create_connection(db_file):
+    try:
+        connection = sqlite3.connect(db_file)
+        connection.execute('pragma foreign_keys=ON')
+        return connection
+    except Error as e:
+        print(e)
+    return None
+
+
 # Collecting Category Names
 def categories():
     query = "SELECT id, category_name FROM categories"
@@ -36,17 +47,6 @@ def dictionary_data():
     contents = cur.fetchall()
     con.close()
     return contents
-
-
-# Connecting the database
-def create_connection(db_file):
-    try:
-        connection = sqlite3.connect(db_file)
-        connection.execute('pragma foreign_keys=ON')
-        return connection
-    except Error as e:
-        print(e)
-    return None
 
 
 # Checking the login state
@@ -110,6 +110,7 @@ def render_signup_page():
             return redirect('/signup?error=Email+is+already+used')
         con.commit()
         con.close()
+
         return redirect("/login")
     error = request.args.get('error')
     if error is None:
@@ -185,11 +186,11 @@ def render_add_category_page():
                            categories_obtained=categories(), teacher_perm=is_teacher())
 
 
-# Displaying the Category page
+# Displaying the Category page  (includes the add a new word ability)
 @app.route('/category/<cat_id>', methods=["GET", "POST"])
 def render_category_page(cat_id):
 
-    # The Add a new word function at the bottom of the page
+    # The Add a new word ability at the bottom of the page
     if request.method == 'POST':     # Post is the method used after submitting your details.
         print(request.form)
         new_maori = request.form.get('maori').strip().title()     # .get: Websites gets the information.
@@ -199,13 +200,19 @@ def render_category_page(cat_id):
         new_image = 'noimage.png'
         new_date = datetime.now()
         new_user = 1
+
+        # Inserts the word into the category
         con = create_connection(DATABASE)
         query = "INSERT INTO dictionary (id, Maori, English, cat_id, " \
                 "Definition, Level, Image, date) VALUES(NULL,?,?,?,?,?,?,?)"
         cur = con.cursor()
-        cur.execute(query, (new_maori, new_english, cat_id, new_definition, new_level, new_image, new_date,))
+        try:
+            cur.execute(query, (new_maori, new_english, cat_id, new_definition, new_level, new_image, new_date,))
+        except sqlite3.IntegrityError:
+            return redirect('/signup?error=Email+is+already+used')
         con.commit()
         con.close()
+
     return render_template('category.html', contents=dictionary_data(), categories_obtained=categories(),
                            cat_id=int(cat_id), logged_in=is_logged_in(),
                            teacher_perm=is_teacher())
@@ -217,7 +224,7 @@ def render_remove_category_page(cat_id):
     if not is_logged_in():
         return redirect('/?error=Not+logged+in')
     if not is_teacher():
-        return redirect('/?error=Teacher+is+not+logged+in')
+        return redirect('/?error=A+teacher+is+not+logged+in')
     return render_template('remove_category.html', categories_obtained=categories(), cat_id=int(cat_id),
                            logged_in=is_logged_in(), teacher_perm=is_teacher(), contents=dictionary_data())
 
@@ -240,11 +247,66 @@ def render_confirm_remove_category_page(cat_id):
     return redirect('/?The+category+has+been+removed')
 
 
-# Displaying the specific word
-@app.route('/word/<word_id>')
+# Displaying the specific word (Includes the edit a word ability)
+@app.route('/word/<word_id>', methods=["GET", "POST"])
 def render_word_page(word_id):
+    if request.method == 'POST':
+
+        if not is_logged_in():
+            return redirect('/?error=Not+logged+in')
+
+        if not is_teacher():
+            return redirect('/?error=Teacher+is+not+logged+in')
+
+        print(request.form)
+        edit_maori = request.form.get('edit_maori').strip().title()
+        edit_english = request.form.get('edit_english').strip().title()
+        edit_definition = request.form.get('edit_definition')
+        edit_level = request.form.get('edit_level').strip()
+        edit_date = datetime.now()
+
+        # Replacing the contents of the word with its new ones.
+        con = create_connection(DATABASE)
+        cur = con.cursor()
+
+        query = "UPDATE dictionary SET Maori=?, English=?, Definition=?, Level=?, " \
+                "date=? WHERE id=?"
+
+        cur.execute(query, (edit_maori, edit_english, edit_definition, edit_level, edit_date, word_id))
+        con.commit()
+        con.close()
+        return redirect('/word/'+str(word_id))
+
     return render_template('word.html', contents=dictionary_data(), categories_obtained=categories(),
                            logged_in=is_logged_in(), teacher_perm=is_teacher(), word_id=int(word_id))
+
+
+# User can delete a word
+@app.route('/remove_word/<word_id>')
+def render_remove_word_page(word_id):
+    if not is_logged_in():
+        return redirect('/?error=Not+logged+in')
+    if not is_teacher():
+        return redirect('/?error=A+teacher+is+not+logged+in')
+    return render_template('remove_word.html', categories_obtained=categories(), logged_in=is_logged_in(),
+                           teacher_perm=is_teacher(), contents=dictionary_data(), word_id=int(word_id))
+
+
+# Conformation when deleting a word
+@app.route('/confirm_remove_word/<word_id>')
+def render_confirm_remove_word_page(word_id):
+    if not is_logged_in():
+        return redirect('/?error=Not+logged+in')
+    if not is_teacher():
+        return redirect('/?error=A+teacher+is+not+logged+in')
+
+    con = create_connection(DATABASE)
+    query = "DELETE FROM dictionary WHERE id = ?"
+    cur = con.cursor()
+    cur.execute(query, (word_id,))
+    con.commit()
+    con.close()
+    return redirect('/?The+word+has+been+removed')
 
 
 # Running the app

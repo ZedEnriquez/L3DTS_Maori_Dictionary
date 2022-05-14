@@ -25,7 +25,7 @@
                 {% for content in contents %}
                     {% if content[3] == cat_id %}
                         <tr>
-                            <td><a>{{ content[1] }}</a></td>
+                            <td><a href="/word/{{ content[0] }}">{{ content[1] }}</a></td>
                             <td>{{ content[2] }}</td>
                             <td>{{ content[7] }}</td>
                         </tr>

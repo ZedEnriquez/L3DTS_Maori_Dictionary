@@ -1,12 +1,18 @@
 {% extends "base.html" %}
 
 {% block main %}
-
-
     {% for word_content in contents %}
         {% if word_content[0] == word_id %}
             <h1>{{word_content[1]}}</h1>
+            {% if logged_in %}
+                {% if teacher_perm %}
+                    <h3><a href="/remove_word/{{ word_content[0]  }}">Remove word</a></h3>
+                {% endif %}
+            {% endif %}
             <table>
+                <tbody>
+                    <td>English: {{word_content[2]}} </td>
+                </tbody>
                 <tbody>
                     <td>Definition: {{word_content[4]}} </td>
                 </tbody>
@@ -24,9 +30,41 @@
                 </tbody>
             </table>
         {% endif %}
-
-
     {% endfor %}
 
+    {% if teacher_perm %}
+            <form class="dataForm" method="POST">
+            <h2>Edit the word </h2>
+                <div class = "form-group">
+                    <div class="form-label">Maori Word:</div>
+                    <div class="form-element"><input id="edit_maori" name="edit_maori" type="text" required></div>
+                </div>
+                <div class = "form-group">
+                    <div class="form-label">English Translation:</div>
+                    <div class="form-element"><input id="edit_english" name="edit_english" type="text" required></div>
+                </div>
+                <div class = "form-group">
+                    <div class="form-label">Level:</div>
+                    <div class="form-element"><input id="edit_level" name="edit_level" type="text" required></div>
+
+
+
+                    <!--    {% for i in range(10) %} -->
+                   <!--  <div class="form-element">
+                   <input value = "{{ i + 1 }}" name="level" type="radio" required><a>"{{ i + 1 }}" </a></div>-->
+                    <!-- {% endfor %} -->
+
+                </div>
+                <div class = "form-group">
+                    <div class="form-label">Definition:</div>
+                    <div class="form-element"><textarea id="edit_definition" name="edit_definition"
+                                                        type="text" required></textarea></div>
+                </div>
+                <div class="button-group">
+                    <input type="submit" value="Submit">
+                    <input type="reset" value="Reset">
+                </div>
+            </form>
+    {% endif %}
 {% endblock %}
 
