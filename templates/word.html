@@ -23,7 +23,7 @@
                     <td>Date Added: {{word_content[7]}} </td>
                 </tbody>
                 <tbody>
-                    <td>Edited by: {{word_content[8]}} </td>
+                    <td>Edited by: {{word_content[8]}} (user id)</td>
                 </tbody>
                 <tbody>
                     <td><img src="/static/images/{{word_content[6]}}" class=thumb</td>
@@ -34,7 +34,7 @@
 
     {% if teacher_perm %}
             <form class="dataForm" method="POST">
-            <h2>Edit the word </h2>
+            <h2>Edit the word</h2>
                 <div class = "form-group">
                     <div class="form-label">Maori Word:</div>
                     <div class="form-element"><input id="edit_maori" name="edit_maori" type="text" required></div>

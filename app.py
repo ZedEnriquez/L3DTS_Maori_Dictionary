@@ -10,7 +10,7 @@ from datetime import datetime
 # Necessary Code
 app = Flask(__name__)
 app.secret_key = "twentyone"
-DATABASE = 'maori_dictionary - Copy.db'
+DATABASE = 'M_dictionary.db'
 
 # Bcrypt is used to hash the user's passwords.
 bcrypt = Bcrypt(app)
@@ -41,7 +41,7 @@ def categories():
 # Fetching the contents for the specified category
 def dictionary_data():
     con = create_connection(DATABASE)
-    query = "SELECT id, Maori, English, cat_id, Definition, Level, Image, date FROM dictionary "
+    query = "SELECT id, Maori, English, cat_id, Definition, Level, Image, Date, User_id FROM dictionary "
     cur = con.cursor()
     cur.execute(query,)
     contents = cur.fetchall()
@@ -72,7 +72,8 @@ def is_teacher():
 # Homepage
 @app.route('/')
 def render_homepage():
-    return render_template("home.html", logged_in=is_logged_in(),
+    print(session)
+    return render_template("home.html", logged_in=is_logged_in(), contents=dictionary_data(),
                            categories_obtained=categories(), teacher_perm=is_teacher())
 
 
@@ -263,16 +264,15 @@ def render_word_page(word_id):
         edit_english = request.form.get('edit_english').strip().title()
         edit_definition = request.form.get('edit_definition')
         edit_level = request.form.get('edit_level').strip()
-        edit_date = datetime.now()
+        edit_user = session.get('userid')
 
         # Replacing the contents of the word with its new ones.
         con = create_connection(DATABASE)
         cur = con.cursor()
 
-        query = "UPDATE dictionary SET Maori=?, English=?, Definition=?, Level=?, " \
-                "date=? WHERE id=?"
+        query = "UPDATE dictionary SET Maori=?, English=?, Definition=?, Level=?, User_id=? WHERE id=?"
 
-        cur.execute(query, (edit_maori, edit_english, edit_definition, edit_level, edit_date, word_id))
+        cur.execute(query, (edit_maori, edit_english, edit_definition, edit_level, edit_user, word_id))
         con.commit()
         con.close()
         return redirect('/word/'+str(word_id))
