@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="M_dictionary" uuid="1b3cbc7a-24ef-4a8b-a565-2fe938c4a37a">
+    <data-source source="LOCAL" name="M_dictionary" uuid="8a282b32-e254-42b3-ba67-75d27f37644d">
       <driver-ref>sqlite.xerial</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
-      <jdbc-url>jdbc:sqlite:C:\Users\Zed Enriquez\OneDrive - Wellington College\L3 DTS\L3DTS_Maori_Dictionary (Main)\M_dictionary.db</jdbc-url>
+      <jdbc-url>jdbc:sqlite:C:\Users\18118\OneDrive - Wellington College\L3 DTS\L3DTS_Maori_Dictionary (Main)\M_dictionary.db</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
       <libraries>
         <library>
-          <url>file://$APPLICATION_CONFIG_DIR$/jdbc-drivers/Xerial SQLiteJDBC/3.36.0.3/sqlite-jdbc-3.36.0.3.jar</url>
+          <url>file://$APPLICATION_CONFIG_DIR$/jdbc-drivers/Xerial SQLiteJDBC/3.34.0/sqlite-jdbc-3.34.0.jar</url>
         </library>
       </libraries>
     </data-source>

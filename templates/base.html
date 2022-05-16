@@ -33,9 +33,9 @@
 			<a> ____________ </a>
 
 			<ul>
-					{% for category in categories_obtained %}
-               	 	<li><a href="/category/{{ category[0] }}">{{ category[1] }}</a></li>
-               	 	{% endfor %}}
+				{% for category in categories_obtained %}
+				<li><a href="/category/{{ category[0] }}">{{ category[1] }}</a></li>
+				{% endfor %}}
 
                 {% else %}
                     <li><a href="/login">login</a></li>

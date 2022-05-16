@@ -69,12 +69,24 @@ def is_teacher():
         return True
 
 
+# Obtaining the user
+def user_details():
+    con = create_connection(DATABASE)
+    query = "SELECT fname, lname, id FROM users"
+    cur = con.cursor()
+    cur.execute(query,)
+    user_obtained = cur.fetchall()
+    con.close()
+    return user_obtained
+
+
 # Homepage
 @app.route('/')
 def render_homepage():
+    print(user_details())
     print(session)
     return render_template("home.html", logged_in=is_logged_in(), contents=dictionary_data(),
-                           categories_obtained=categories(), teacher_perm=is_teacher())
+                           categories_obtained=categories(), teacher_perm=is_teacher(), user_obtained=user_details())
 
 
 # User Signup
@@ -278,7 +290,8 @@ def render_word_page(word_id):
         return redirect('/word/'+str(word_id))
 
     return render_template('word.html', contents=dictionary_data(), categories_obtained=categories(),
-                           logged_in=is_logged_in(), teacher_perm=is_teacher(), word_id=int(word_id))
+                           logged_in=is_logged_in(), teacher_perm=is_teacher(), word_id=int(word_id),
+                           user_obtained=user_details())
 
 
 # User can delete a word
