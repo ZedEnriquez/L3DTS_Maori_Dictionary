@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="1b9264c3-3470-4457-82b2-5a04752f5db8" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/templates/login.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/login.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/signup.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/signup.html" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="HTML File" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitSEFilterConfiguration">
+    <file-type-list>
+      <filtered-out-file-type name="LOCAL_BRANCH" />
+      <filtered-out-file-type name="REMOTE_BRANCH" />
+      <filtered-out-file-type name="TAG" />
+      <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
+    </file-type-list>
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectId" id="290F5uVZIzGhN2pqJSuO9dJFPYb" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="DefaultHtmlFileTemplate" value="HTML File" />
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="node.js.detected.package.eslint" value="true" />
+    <property name="node.js.detected.package.tslint" value="true" />
+    <property name="node.js.selected.package.eslint" value="(autodetect)" />
+    <property name="node.js.selected.package.tslint" value="(autodetect)" />
+  </component>
+  <component name="RunManager" selected="Python.app">
+    <configuration name="remove_category.html" type="JavascriptDebugType" temporary="true" nameIsGenerated="true" uri="http://localhost:63342/L3DTS_Maori_Dictionary (Main)/templates/remove_category.html" useBuiltInWebServerPort="true">
+      <method v="2" />
+    </configuration>
+    <configuration name="app" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="WCDTSMD" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/app.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Python.app" />
+        <item itemvalue="JavaScript Debug.remove_category.html" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="1b9264c3-3470-4457-82b2-5a04752f5db8" name="Changes" comment="" />
+      <created>1652241915403</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1652241915403</updated>
+      <workItem from="1652241917830" duration="204000" />
+      <workItem from="1652242232385" duration="279000" />
+      <workItem from="1652243913485" duration="11000" />
+      <workItem from="1652243960508" duration="17000" />
+      <workItem from="1652245469342" duration="83000" />
+      <workItem from="1652245714451" duration="6447000" />
+      <workItem from="1652307324760" duration="1187000" />
+      <workItem from="1652308579831" duration="125000" />
+      <workItem from="1652308950811" duration="128000" />
+      <workItem from="1652317675582" duration="652000" />
+      <workItem from="1652319647109" duration="148000" />
+      <workItem from="1652328771604" duration="12109000" />
+      <workItem from="1652349939700" duration="6088000" />
+      <workItem from="1652405667848" duration="2921000" />
+      <workItem from="1652482668234" duration="14059000" />
+      <workItem from="1652502964772" duration="9535000" />
+      <workItem from="1652512930228" duration="286000" />
+      <workItem from="1652568014993" duration="1538000" />
+      <workItem from="1652569684642" duration="10000" />
+      <workItem from="1652573768162" duration="5775000" />
+      <workItem from="1652601527750" duration="84000" />
+      <workItem from="1652601638433" duration="2837000" />
+      <workItem from="1652672899906" duration="9000" />
+      <workItem from="1652674517981" duration="4558000" />
+      <workItem from="1652679307427" duration="1488000" />
+      <workItem from="1652837888250" duration="3444000" />
+      <workItem from="1652841726316" duration="121000" />
+    </task>
+    <task id="LOCAL-00001" summary="May 11, 2022">
+      <created>1652242043379</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1652242043379</updated>
+    </task>
+    <task id="LOCAL-00002" summary="May 11, 2022">
+      <created>1652246126651</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1652246126651</updated>
+    </task>
+    <task id="LOCAL-00003" summary="May 11, 2022&#10;Currently working on the teacher/ student login.">
+      <created>1652252510608</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1652252510608</updated>
+    </task>
+    <task id="LOCAL-00004" summary="May 12, 2022&#10;Teacher/ student login works">
+      <created>1652333569958</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1652333569958</updated>
+    </task>
+    <task id="LOCAL-00005" summary="May 12, 2022&#10;Teacher/ student login works">
+      <created>1652333662942</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1652333662942</updated>
+    </task>
+    <task id="LOCAL-00006" summary="May 12, 2022&#10;This code is fully merged; Teacher/Student login works. &#10;Database has now been connected to github.">
+      <created>1652334684044</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1652334684044</updated>
+    </task>
+    <task id="LOCAL-00007" summary="May 12, 2022">
+      <created>1652339807205</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1652339807205</updated>
+    </task>
+    <task id="LOCAL-00008" summary="May 12, 2022">
+      <created>1652352928760</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1652352928760</updated>
+    </task>
+    <task id="LOCAL-00009" summary="May 12, 2022&#10;Panda has been added">
+      <created>1652356068378</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1652356068378</updated>
+    </task>
+    <task id="LOCAL-00010" summary="May 14, 2022&#10;This code works. I'm now currently working on the confirmation part of removing&#10;a category.">
+      <created>1652491113610</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1652491113610</updated>
+    </task>
+    <task id="LOCAL-00011" summary="May 14, 2022&#10;Removing a category now works.">
+      <created>1652497073593</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1652497073593</updated>
+    </task>
+    <task id="LOCAL-00012" summary="May 14, 2022&#10;&#10;Current status: 90% done. LESS GOOOOO.&#10;&#10;TO DO: &#10;Alter table auto increment for category id&#10;Edited by&#10;Update schema&#10;prevent duplicate words/categories from being added">
+      <created>1652512586535</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1652512586535</updated>
+    </task>
+    <task id="LOCAL-00013" summary="May 15, 2022&#10;&#10;Current status: Shows edited by (user id) rather than their name&#10;&#10;TO DO: &#10;Alter table auto increment for category id&#10;Update schema&#10;prevent duplicate words/categories from being added">
+      <created>1652580284931</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1652580284931</updated>
+    </task>
+    <task id="LOCAL-00014" summary="May 15, 2022&#10;&#10;Current status: Shows edited by (user id) rather than their name&#10;&#10;TO DO: &#10;Alter table auto increment for category id&#10;Update schema&#10;prevent duplicate words/categories from being added">
+      <created>1652580316212</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1652580316212</updated>
+    </task>
+    <task id="LOCAL-00015" summary="May 15, 2022">
+      <created>1652610264775</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1652610264775</updated>
+    </task>
+    <task id="LOCAL-00016" summary="May 15, 2022&#10;&#10;Fixed Edited by: ...">
+      <created>1652679106575</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1652679106575</updated>
+    </task>
+    <task id="LOCAL-00017" summary="May 18, 2022">
+      <created>1652841195201</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1652841195201</updated>
+    </task>
+    <option name="localTasksCounter" value="18" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="May 11, 2022" />
+    <MESSAGE value="May 11, 2022&#10;Currently working on the teacher/ student login." />
+    <MESSAGE value="May 12, 2022&#10;Teacher/ student login works" />
+    <MESSAGE value="May 12, 2022&#10;This code is fully merged; Teacher/Student login works. &#10;Database has now been connected to github." />
+    <MESSAGE value="May 12, 2022" />
+    <MESSAGE value="May 12, 2022&#10;Panda has been added" />
+    <MESSAGE value="May 14, 2022&#10;This code works. I'm now currently working on the confirmation part of removing&#10;a category." />
+    <MESSAGE value="May 14, 2022&#10;Removing a category now works." />
+    <MESSAGE value="May 14, 2022&#10;&#10;Current status: 90% done. LESS GOOOOO.&#10;&#10;TO DO: &#10;Alter table auto increment for category id&#10;Edited by&#10;Update schema&#10;prevent duplicate words/categories from being added" />
+    <MESSAGE value="May 15, 2022&#10;&#10;Current status: Shows edited by (user id) rather than their name&#10;&#10;TO DO: &#10;Alter table auto increment for category id&#10;Update schema&#10;prevent duplicate words/categories from being added" />
+    <MESSAGE value="May 15, 2022" />
+    <MESSAGE value="May 15, 2022&#10;&#10;Fixed Edited by: ..." />
+    <MESSAGE value="May 18, 2022" />
+    <option name="LAST_COMMIT_MESSAGE" value="May 18, 2022" />
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/L3DTS_Maori_Dictionary__Main_$app.coverage" NAME="app Coverage Results" MODIFIED="1652839996586" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/L3DTS_Maori_Dictionary___Copy$app.coverage" NAME="app Coverage Results" MODIFIED="1652241960716" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+  </component>
+</project>
