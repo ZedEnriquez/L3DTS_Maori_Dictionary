@@ -35,24 +35,25 @@
     <h2>Add a new word </h2>
         <div class = "form-group">
             <div class="form-label">Maori Word:</div>
-            <div class="form-element"><input id="maori" name="maori" type="text" required></div>
+            <div class="form-element"><input id="maori" name="maori" type="text" required
+            MAXLENGTH="30"></div>
         </div>
         <div class = "form-group">
             <div class="form-label">English Translation:</div>
-            <div class="form-element"><input id="english" name="english" type="text" required></div>
+            <div class="form-element"><input id="english" name="english" type="text" required
+            MAXLENGTH="30"></div>
         </div>
-        <div class = "form-group">
-            <div class="form-label">Level:</div>
-            <div class="form-element"><input id="level" name="level" type="text" required></div>
+<!--        <div class = "form-group">-->
+<!--            <div class="form-label">Level:</div>-->
+<!--            <div class="form-element"><input id="level" name="level" type="text" required></div>-->
 
+            <div class="form-element">
+            {% for i in range(10) %}
 
+           <input value = "{{ i + 1 }}" name="level" type="radio" required><a>{{ i + 1 }} </a>
+            {% endfor %}
+           </div>
 
-            <!--    {% for i in range(10) %} -->
-           <!--  <div class="form-element">
-           <input value = "{{ i + 1 }}" name="level" type="radio" required><a>"{{ i + 1 }}" </a></div>-->
-            <!-- {% endfor %} -->
-
-        </div>
         <div class = "form-group">
             <div class="form-label">Definition:</div>
             <div class="form-element"><textarea id="definition" name="definition" type="text" required></textarea></div>

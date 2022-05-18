@@ -71,6 +71,10 @@ img {
     margin-left: 0.5rem;
 }
 
+.dataForm input[type='radio']{
+    width: 5%;
+}
+
 .error {
     color: #ff0000;
 }
@@ -288,7 +292,7 @@ footer img {
     }
 
     main {
-        background-image: url('/poutama.jpg');
+        background-image: url('../images/poutama.jpg');
     }
     .formRow {
         display: grid;

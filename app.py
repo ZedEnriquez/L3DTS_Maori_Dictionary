@@ -6,6 +6,7 @@ import sqlite3
 from sqlite3 import Error
 from flask_bcrypt import Bcrypt
 from datetime import datetime
+import string
 
 # Necessary Code
 app = Flask(__name__)
@@ -103,6 +104,12 @@ def render_signup_page():
         password2 = request.form.get('password2')
         teacher = request.form.get('teacher')
 
+        if not fname.isalpha():
+            return redirect('/?error=No+symbols+pls')
+
+        if not lname.isalpha():
+            return redirect('/?error=No+symbols+pls')
+
         if password != password2:     # Notifies the user that there is an input problem.
             return redirect('/signup?error=Passwords+dont+match')
 
@@ -180,8 +187,14 @@ def render_add_category_page():
     if is_teacher() == 0:
         return redirect('/')
     if request.method == 'POST':
+
         print(request.form)
         cat_name = request.form['category_name'].strip().title()
+
+        if not cat_name.isalpha():
+            return redirect('/?error=No+symbols+pls')
+
+
         query = "INSERT INTO categories(id, category_name) VALUES(NULL,?)"  # inserts into "categories".
         con = create_connection(DATABASE)
         cur = con.cursor()

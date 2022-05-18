@@ -43,22 +43,20 @@
             <h2>Edit the word</h2>
                 <div class = "form-group">
                     <div class="form-label">Maori Word:</div>
-                    <div class="form-element"><input id="edit_maori" name="edit_maori" type="text" required></div>
+                    <div class="form-element"><input id="edit_maori" name="edit_maori" type="text" required
+                    MAXLENGTH="30"></div>
                 </div>
                 <div class = "form-group">
                     <div class="form-label">English Translation:</div>
-                    <div class="form-element"><input id="edit_english" name="edit_english" type="text" required></div>
+                    <div class="form-element"><input id="edit_english" name="edit_english" type="text" required
+                    MAXLENGTH="30"></div>
                 </div>
-                <div class = "form-group">
-                    <div class="form-label">Level:</div>
-                    <div class="form-element"><input id="edit_level" name="edit_level" type="text" required></div>
 
-
-
-                    <!--    {% for i in range(10) %} -->
-                   <!--  <div class="form-element">
-                   <input value = "{{ i + 1 }}" name="level" type="radio" required><a>"{{ i + 1 }}" </a></div>-->
-                    <!-- {% endfor %} -->
+                {% for i in range(10) %}
+                   <div class="form-element"><p>
+                   <input type="radio"  name="level" id ="level" value = "{{ i + 1 }}" required><a>{{ i + 1 }}</a></div>
+                    </p>
+                {% endfor %}
 
                 </div>
                 <div class = "form-group">
