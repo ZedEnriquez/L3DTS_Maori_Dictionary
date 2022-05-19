@@ -1,4 +1,4 @@
-# Zed's Maori Dictionary
+# Zed's Maori Dictionary :)
 
 # Imports
 from flask import Flask, render_template, request, session, redirect
