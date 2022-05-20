@@ -6,7 +6,6 @@ import sqlite3
 from sqlite3 import Error
 from flask_bcrypt import Bcrypt
 from datetime import datetime
-import string
 
 # Necessary Code
 app = Flask(__name__)
@@ -86,6 +85,7 @@ def user_details():
 def render_homepage():
     print(user_details())
     print(session)
+    print(categories())
     return render_template("home.html", logged_in=is_logged_in(), contents=dictionary_data(),
                            categories_obtained=categories(), teacher_perm=is_teacher(), user_obtained=user_details())
 
@@ -193,7 +193,6 @@ def render_add_category_page():
 
         if not cat_name.isalpha():
             return redirect('/?error=No+symbols+pls')
-
 
         query = "INSERT INTO categories(id, category_name) VALUES(NULL,?)"  # inserts into "categories".
         con = create_connection(DATABASE)

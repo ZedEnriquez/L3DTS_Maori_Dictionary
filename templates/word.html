@@ -52,13 +52,13 @@
                     MAXLENGTH="30"></div>
                 </div>
 
-                {% for i in range(10) %}
-                   <div class="form-element"><p>
-                   <input type="radio"  name="level" id ="level" value = "{{ i + 1 }}" required><a>{{ i + 1 }}</a></div>
-                    </p>
-                {% endfor %}
-
+                <div class="form-element">
+                        <div class="form-label">Year Level:</div>
+                        {% for i in range(10) %}
+                            <input value = "{{ i + 1 }}" name="level" type="radio" required><a>{{ i + 1 }} </a>
+                        {% endfor %}
                 </div>
+
                 <div class = "form-group">
                     <div class="form-label">Definition:</div>
                     <div class="form-element"><textarea id="edit_definition" name="edit_definition"
