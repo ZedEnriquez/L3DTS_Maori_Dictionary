@@ -28,18 +28,20 @@
 						<li><a href="/add_category">Add a category</a></li>
 						{% endif %}
                     <li><a href="/logout">Logout</a></li>
+				{% else %}
+                    <li><a href="/login">login</a></li>
+                {% endif %}
 			</ul>
 
 			<a> ____________ </a>
+
+            {# For every category I have in my "categories" table a clickable link is
+               created and then shown on the navigation bar, which is found on the left side. #}
 
 			<ul>
 				{% for category in categories_obtained %}
 				<li><a href="/category/{{ category[0] }}">{{ category[1] }}</a></li>
 				{% endfor %}}
-
-                {% else %}
-                    <li><a href="/login">login</a></li>
-                {% endif %}
 			</ul>
 		</nav>
 
@@ -51,8 +53,7 @@
 		-->
 
 		<main>
-            {% block main%}
-			{% endblock %}
+            {% block main%}{% endblock %}
         </main>
 
 

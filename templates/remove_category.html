@@ -1,8 +1,16 @@
 {% extends "base.html" %}
 
 {% block main %}
+
+    {# A check has been put in place for every category within the category list (gotten from a query)  #}
+    {#  e.g [(1, 'Actions'), (2, 'Animals'), (3, 'Clothing')  #}
+
+    {# For every category, e.g. (1, 'Actions'), if the first thing ("1") is equal to the category id, that is currently
+       being used/displayed then the remove category confirmation sentence is shown. #}
+
     {% for category in categories_obtained %}
         {% if category[0] == cat_id %}
+
             <table>
                 {% if logged_in %}
                     {% if teacher_perm %}

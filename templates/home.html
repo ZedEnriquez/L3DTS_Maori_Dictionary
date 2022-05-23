@@ -1,14 +1,12 @@
 {% extends 'base.html' %}
 
-
-
 {% block heading %}
     {% if logged_in %}
         {% if teacher_perm %}
             The Best | Maōri - English | Dictionary
         {% endif %}
     {% else %}
-    Zed's | Maōri - English | Dictionary
+        Zed's | Maōri - English | Dictionary
     {% endif %}
 {% endblock %}
 
@@ -25,7 +23,6 @@
 
     {% else %}
 
-        <b>In order to use this amazing dictionary you need to log in using your account.</b>
         <div class = "Panda">
         <p>____§§§§§_____§§§§§§§____§§§§§§</p>
         <p>§§§§§§§§§_________________§§§§§§c§§</p>

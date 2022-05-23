@@ -29,10 +29,17 @@ def create_connection(db_file):
 
 # Collecting Category Names
 def categories():
-    query = "SELECT id, category_name FROM categories"
+
+    # The task is to obtain the "id" and "category_name" rows (including its information)
+    # from the "categories" table.
+    query = "SELECT id, category_name FROM categories ORDER BY category_name ASC"
+
+    # The program then retrieves the data/ performs the task
     con = create_connection(DATABASE)
     cur = con.cursor()
     cur.execute(query)
+
+    # The data that has been obtained has now been put in a list and is called "category_list"
     category_list = cur.fetchall()
     con.close()
     return category_list
@@ -41,7 +48,11 @@ def categories():
 # Fetching the contents for the specified category
 def dictionary_data():
     con = create_connection(DATABASE)
-    query = "SELECT id, Maori, English, cat_id, Definition, Level, Image, Date, User_id FROM dictionary "
+
+    # The task: To obtain all the contents within the "dictionary" table.
+    query = "SELECT * FROM dictionary ORDER BY Maori ASC "
+
+    # The task is performed and the collated information is now referred to "contents"
     cur = con.cursor()
     cur.execute(query,)
     contents = cur.fetchall()
@@ -61,6 +72,8 @@ def is_logged_in():
 
 # Checking if the user is a teacher
 def is_teacher():
+
+    # 1 = True, 0 = False
     if session.get("teacher") == 0:
         print("A teacher isn't logged in")
         return False
@@ -72,7 +85,11 @@ def is_teacher():
 # Obtaining the user
 def user_details():
     con = create_connection(DATABASE)
+
+    # The task: To obtain the fname, lname, and id rows from the "users" table
     query = "SELECT fname, lname, id FROM users"
+
+    # The task is performed and the collated information is now referred to "user_obtained"
     cur = con.cursor()
     cur.execute(query,)
     user_obtained = cur.fetchall()
@@ -83,9 +100,9 @@ def user_details():
 # Homepage
 @app.route('/')
 def render_homepage():
-    print(user_details())
     print(session)
-    print(categories())
+
+    # Here the "home.html" template is rendered and a list of functions are called.
     return render_template("home.html", logged_in=is_logged_in(), contents=dictionary_data(),
                            categories_obtained=categories(), teacher_perm=is_teacher(), user_obtained=user_details())
 
@@ -95,7 +112,7 @@ def render_homepage():
 def render_signup_page():
     if is_logged_in():
         return redirect('/')
-    if request.method == 'POST':     # Post is the method used after submitting your details.
+    if request.method == 'POST':     # Post is the method used after submitting your details on the form.
         print(request.form)
         fname = request.form.get('fname').strip().title()     # .get: Websites gets the information.
         lname = request.form.get('lname').strip().title()     # .strip().title() Sanitizes the details.
@@ -104,26 +121,34 @@ def render_signup_page():
         password2 = request.form.get('password2')
         teacher = request.form.get('teacher')
 
+        # User gets sent back to the signup form
+        # because they included more than just characters
+        # in their first and last names.
+
         if not fname.isalpha():
-            return redirect('/?error=No+symbols+pls')
+            return redirect('/signup?error=No+symbols+pls')
 
         if not lname.isalpha():
-            return redirect('/?error=No+symbols+pls')
+            return redirect('/signup?error=No+symbols+pls')
 
-        if password != password2:     # Notifies the user that there is an input problem.
+        if password != password2:     # Notifies the user that there is has been an input problem.
             return redirect('/signup?error=Passwords+dont+match')
 
-        if len(password) < 8:     # Requires the user to have a more secure password.
+        if len(password) < 8:     # Requires the user to have a more lengthy password.
             return redirect('/signup?error=Passwords+be+8+characters+or+more')
 
         # password gets jumbled preventing it from being able to be hacked and used.
         hashed_password = bcrypt.generate_password_hash(password)
 
-        con = create_connection(DATABASE)     # creates the connection with the desired database file.
+        con = create_connection(DATABASE)
 
-        # inserts into "users".
+        # inserts the details (submitted through the signup form) into the "users" table.
         query = "INSERT INTO users(id, fname, lname, email, password, teacher) VALUES(NULL,?,?,?,?,?)"
         cur = con.cursor()
+
+        # The program will try to insert the new details in the "users" table.
+        # However, if an existing email is trying to be reused then the user
+        # will get sent back to the signup page.
         try:
             cur.execute(query, (fname, lname, email, hashed_password, teacher))
         except sqlite3.IntegrityError:
@@ -132,6 +157,7 @@ def render_signup_page():
         con.close()
 
         return redirect("/login")
+
     error = request.args.get('error')
     if error is None:
         error = ""
@@ -158,10 +184,13 @@ def render_login_page():
             firstname = user_data[0][1]
             db_password = user_data[0][2]
             teacher = user_data[0][3]
+
+        # If there has been an input error the program will redirect the user back to the login page.
         except IndexError:
             return redirect("/login?error=Email+invalid+or+password+incorrect")
         if not bcrypt.check_password_hash(db_password, password):
             return redirect(request.referrer + "?error=Email+invalid+or+password+incorrect")
+
         session['email'] = email
         session['userid'] = userid
         session['firstname'] = firstname
@@ -184,14 +213,16 @@ def logout():
 # User can add a category
 @app.route('/add_category', methods=["GET", "POST"])
 def render_add_category_page():
+
+    # The user has to be a teacher in order to add a category.
     if is_teacher() == 0:
         return redirect('/')
-    if request.method == 'POST':
 
+    if request.method == 'POST':
         print(request.form)
         cat_name = request.form['category_name'].strip().title()
 
-        if not cat_name.isalpha():
+        if not cat_name.isalpha():     # The name of the category must be in characters only.
             return redirect('/?error=No+symbols+pls')
 
         query = "INSERT INTO categories(id, category_name) VALUES(NULL,?)"  # inserts into "categories".
@@ -222,9 +253,8 @@ def render_category_page(cat_id):
         new_english = request.form.get('english').strip().title()     # .strip().title() Sanitizes the details.
         new_definition = request.form.get('definition').strip()
         new_level = request.form.get('level').strip()
-        new_image = 'noimage.png'
+        new_image = 'no_image.png'
         new_date = datetime.now()
-        new_user = 1
 
         # Inserts the word into the category
         con = create_connection(DATABASE)

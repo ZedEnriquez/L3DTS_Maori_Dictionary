@@ -1,8 +1,16 @@
 {% extends "base.html" %}
 
 {% block main %}
+
+    {# A check has been put in place for every category within the category list (gotten from a query)  #}
+    {#  e.g [(1, 'Actions'), (2, 'Animals'), (3, 'Clothing')  #}
+
+    {# For every category, e.g. (1, 'Actions'), if the first thing ("1") is equal to the category id, that is currently
+       being used/displayed then the remove category, contents, and the add a form function is shown. #}
+
     {% for category in categories_obtained %}
         {% if category[0] == cat_id %}
+
             <table>
                 <h1>{{ category[1] }}</h1>
                 {% if logged_in %}
@@ -16,8 +24,12 @@
                     <th>Date added</th>
                 </tr>
                 <tbody>
+
+                    {# If the word is under the category it will then show it in Maori, English, and the date
+                       that it was added to the dictionary. #}
                     {% for content in contents %}
                         {% if content[3] == cat_id %}
+
                             <tr>
                                 <td><a href="/word/{{ content[0] }}">{{ content[1] }}</a></td>
                                 <td>{{ content[2] }}</td>
@@ -41,9 +53,6 @@
                         <div class="form-element"><input id="english" name="english" type="text" required
                         MAXLENGTH="30"></div>
                     </div>
-            <!--        <div class = "form-group">-->
-            <!--            <div class="form-label">Level:</div>-->
-            <!--            <div class="form-element"><input id="level" name="level" type="text" required></div>-->
 
                     <div class="form-element">
                         <div class="form-label">Year Level:</div>

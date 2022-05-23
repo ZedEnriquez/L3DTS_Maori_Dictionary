@@ -1,8 +1,20 @@
 {% extends "base.html" %}
 
 {% block main %}
+
+    {# A check has been put in place for every word within the contents list (gotten from a query)  #}
+
+    {# e.g. Two words within the long dicionary list #}
+
+    {#  (290, 'ahiahi', 'afternoon', 16, 'Pending', 3, 'noimage.png', '13/04/2022 14:14', 1),
+        (139, 'aihikirimi', 'ice cream', 7, 'Pending', 8, 'icecream.jpg', '13/04/2022 14:14', 1)  #}
+
+    {# For every word, e.g. (290, 'ahiahi'...), if its word id is equal to the word_id that is being used then
+       the remove word confirmation sentence is shown, and its contents is shown. #}
+
     {% for word_content in contents %}
         {% if word_content[0] == word_id %}
+
             <h1>{{word_content[1]}}</h1>
             {% if logged_in %}
                 {% if teacher_perm %}
