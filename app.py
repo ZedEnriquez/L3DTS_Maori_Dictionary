@@ -101,7 +101,7 @@ def user_details():
 @app.route('/')
 def render_homepage():
     print(session)
-
+    print(dictionary_data())
     # Here the "home.html" template is rendered and a list of functions are called.
     return render_template("home.html", logged_in=is_logged_in(), contents=dictionary_data(),
                            categories_obtained=categories(), teacher_perm=is_teacher(), user_obtained=user_details())
@@ -326,7 +326,11 @@ def render_word_page(word_id):
 
         query = "UPDATE dictionary SET Maori=?, English=?, Definition=?, Level=?, User_id=? WHERE id=?"
 
-        cur.execute(query, (edit_maori, edit_english, edit_definition, edit_level, edit_user, word_id))
+        try:
+            cur.execute(query, (edit_maori, edit_english, edit_definition, edit_level, edit_user, word_id))
+        except sqlite3.IntegrityError:
+            return redirect('/signup?error=Email+is+already+used')
+
         con.commit()
         con.close()
         return redirect('/word/'+str(word_id))
