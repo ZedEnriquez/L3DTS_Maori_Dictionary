@@ -38,7 +38,7 @@
                 {% for user in user_obtained %}
                     {% if user[2] == word_content[8] %}
                         <tbody>
-                            <td>Added by: {{user_obtained[0][0]}} {{user_obtained[0][1]}}</td>
+                            <td>Added by: {{user[0]}} {{user[1]}}</td>
                         </tbody>
                     {% endif %}
                 {% endfor %}
@@ -67,7 +67,7 @@
                 <div class="form-element">
                         <div class="form-label">Year Level:</div>
                         {% for i in range(10) %}
-                            <input value = "{{ i + 1 }}" name="level" type="radio" required><a>{{ i + 1 }} </a>
+                            <input value = "{{ i + 1 }}" name="edit_level" type="radio" required><a>{{ i + 1 }} </a>
                         {% endfor %}
                 </div>
 

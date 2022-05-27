@@ -101,7 +101,6 @@ def user_details():
 @app.route('/')
 def render_homepage():
     print(session)
-    print(dictionary_data())
     # Here the "home.html" template is rendered and a list of functions are called.
     return render_template("home.html", logged_in=is_logged_in(), contents=dictionary_data(),
                            categories_obtained=categories(), teacher_perm=is_teacher(), user_obtained=user_details())
@@ -196,6 +195,7 @@ def render_login_page():
         session['firstname'] = firstname
         session['teacher'] = teacher
         print(session)
+
         return redirect('/')
     return render_template("login.html", logged_in=is_logged_in(),
                            categories_obtained=categories(), teacher_perm=is_teacher())
@@ -252,22 +252,23 @@ def render_category_page(cat_id):
         new_maori = request.form.get('maori').strip().title()     # .get: Websites gets the information.
         new_english = request.form.get('english').strip().title()     # .strip().title() Sanitizes the details.
         new_definition = request.form.get('definition').strip()
-        new_level = request.form.get('level').strip()
-        new_image = 'no_image.png'
+        new_level = request.form.get('level')
+        new_image = 'noimage.png'
         new_date = datetime.now()
+        new_user = session.get('userid')
 
         # Inserts the word into the category
         con = create_connection(DATABASE)
         query = "INSERT INTO dictionary (id, Maori, English, cat_id, " \
-                "Definition, Level, Image, date) VALUES(NULL,?,?,?,?,?,?,?)"
+                "Definition, Level, Image, date, User_id) VALUES(NULL,?,?,?,?,?,?,?,?)"
         cur = con.cursor()
         try:
-            cur.execute(query, (new_maori, new_english, cat_id, new_definition, new_level, new_image, new_date,))
+            cur.execute(query, (new_maori, new_english, cat_id, new_definition, new_level, new_image, new_date,
+                                new_user))
         except sqlite3.IntegrityError:
             return redirect('/signup?error=Email+is+already+used')
         con.commit()
         con.close()
-
     return render_template('category.html', contents=dictionary_data(), categories_obtained=categories(),
                            cat_id=int(cat_id), logged_in=is_logged_in(),
                            teacher_perm=is_teacher())
@@ -317,24 +318,20 @@ def render_word_page(word_id):
         edit_maori = request.form.get('edit_maori').strip().title()
         edit_english = request.form.get('edit_english').strip().title()
         edit_definition = request.form.get('edit_definition')
-        edit_level = request.form.get('edit_level').strip()
+        edit_level = request.form.get('edit_level')
         edit_user = session.get('userid')
 
         # Replacing the contents of the word with its new ones.
         con = create_connection(DATABASE)
         cur = con.cursor()
-
         query = "UPDATE dictionary SET Maori=?, English=?, Definition=?, Level=?, User_id=? WHERE id=?"
-
         try:
             cur.execute(query, (edit_maori, edit_english, edit_definition, edit_level, edit_user, word_id))
         except sqlite3.IntegrityError:
             return redirect('/signup?error=Email+is+already+used')
-
         con.commit()
         con.close()
         return redirect('/word/'+str(word_id))
-
     return render_template('word.html', contents=dictionary_data(), categories_obtained=categories(),
                            logged_in=is_logged_in(), teacher_perm=is_teacher(), word_id=int(word_id),
                            user_obtained=user_details())
@@ -358,7 +355,6 @@ def render_confirm_remove_word_page(word_id):
         return redirect('/?error=Not+logged+in')
     if not is_teacher():
         return redirect('/?error=A+teacher+is+not+logged+in')
-
     con = create_connection(DATABASE)
     query = "DELETE FROM dictionary WHERE id = ?"
     cur = con.cursor()
